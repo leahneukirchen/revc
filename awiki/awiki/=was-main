@@ -1,0 +1,85 @@
+#include "hackerlab/mem/mem.h"
+#include "hackerlab/vu/safe.h"
+#include "awiki/libds/identifier.h"
+#include "awiki/libbufs/file-buffers.h"
+#include "awiki/libawiki/awiki.h"
+
+Identifier_safe_decl (paper, "paper");
+
+int
+main (int argc, char ** argv)
+{
+  int errn;
+  ssize_t bs;
+  ssize_t gr;
+  ssize_t source_buffer;
+  ssize_t output_buffer;
+  ssize_t errors_buffer;
+  t_buffer_marker start_pt;
+  t_buffer_marker end_pt;
+  t_buffer_marker output_pt;
+  t_buffer_marker error_pt;
+  ssize_t node;
+
+  if (0 > init_awiki ())
+    exit (5);
+
+  bs = buffer_set_open (0, 0, 0);
+  gr = open_digraph (0, 0, 0);
+
+  if (bs < 0)
+    exit (20);
+
+  if (gr < 0)
+    exit (30);
+
+  source_buffer = get_buffer_index_create (bs, "source");
+  output_buffer = get_buffer_index_create (bs, "output");
+  errors_buffer = get_buffer_index_create (bs, "errors");
+
+  node = digraph_alloc_node (gr);
+  if (node < 0)
+    exit (35);
+
+  if ((source_buffer < 0) || (output_buffer < 0) || (errors_buffer < 0))
+    exit (40);
+
+  if (0 > buffer_insert_from_fd (&errn, 0, bs, source_buffer, 0, 0, -1))
+    exit (50);
+
+  if (   (0 > init_buffer_marker (&start_pt, bs, source_buffer, 0))
+      || (0 > init_buffer_marker (&end_pt, bs, source_buffer, buffer_size (bs, source_buffer)))
+      || (0 > init_buffer_marker (&error_pt, bs, errors_buffer, 0))
+      || (0 > init_buffer_marker (&output_pt, bs, output_buffer, 0)))
+    exit (55);
+
+  if (0 > awiki_parse_for_type (Identifier (paper), gr, node, &error_pt, &start_pt, &end_pt))
+    exit (60);
+
+  {
+    t_awiki_html_state state;
+
+    mem_set0 ((t_uchar *)&state, sizeof (state));
+    if (0 > awiki_to_html (&state, gr, node, & error_pt, &output_pt))
+      exit (70);
+  }
+
+  {
+    t_uchar * buf;
+    ssize_t amt;
+
+    amt = buffer_size (bs, output_buffer);
+    buf = buffer_range (bs, output_buffer, 0, amt);
+
+    if (!buf)
+      exit (100);
+
+    safe_write (1, buf, amt);
+  }
+  
+  exit (0);
+}
+
+
+/* arch-tag: Tom Lord Sun Oct 24 22:11:55 2004 (libawiki/main.c)
+ */

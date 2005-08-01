@@ -1,0 +1,33 @@
+
+generated-includes	:=	endian.h alignment.h
+
+include $(makefiles)/library-objects.mk
+
+ifeq ($(cgs__install_hackerlab),1)
+include $(makefiles)/install-includes.mk
+endif
+
+endian.h: endian.sh
+	$(cfg__posix_shell) $(srcdir)/endian.sh $(CC)
+
+alignment.h: gen-alignment.to-c
+	test ! -e gen-alignment || rm gen-alignment
+	test ! -e gen-alignment.c || rm gen-alignment.c
+	cp $(srcdir)/gen-alignment.to-c gen-alignment.c
+	$(CC) -o gen-alignment gen-alignment.c
+	./gen-alignment > alignment.h
+
+clean: clean-generators
+
+clean-generators:
+	test ! -e endian-test || rm endian-test
+	test ! -e endian-test.c || rm endian-test.c
+	test ! -e gen-alignment || rm gen-alignment
+	test ! -e gen-alignment.c || rm gen-alignment.c
+	test ! -e endian.h || rm endian.h
+	test ! -e alignment.h || rm alignment.h
+
+
+
+# tag: Tom Lord Tue Dec  4 14:52:09 2001 (machine/Makefile.in)
+#

@@ -1,0 +1,310 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+  <head>
+    <title>Seyza</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link href="../gnuarch.css" rel="stylesheet" type="text/css">
+  </head>
+
+  <body>
+
+    <h1 class="page-title"><u>Seyza</u></h1>
+
+    <div class="mainContent">
+
+<h1 class=essay-title>
+  A Quick Intro to Core Arch 2.0 Commands<br>
+  
+</h1>
+
+
+  <h2>Core Commands
+</h2>
+  <p>
+    Arch 2.0 has only a few core commands.
+
+
+
+
+  <p>
+    These are:
+
+
+
+
+
+  
+    <h3><b><code>init</code> [<i>directory</i>]</b>
+</h3>
+    <p>
+      Create a <code>.revc</code> subdir in <i>directory</i> (default is the current
+  directory) and fill it with the default Arch 2.0 control files.
+
+
+
+
+    <p>
+      User's never need to edit these files directly!
+
+
+
+
+    <p>
+      Initializing the root directory of a source tree is the first
+  step in importing it.
+
+
+
+
+
+  
+  
+  
+    <h3><b><code>commit</code> [-r <i>name</i>] [<i>subtree</i> ...]</b>
+</h3>
+    <p>
+      Commit a revision using either <i>name</i> or the default name.
+
+
+
+
+    <p>
+      With <i>subtree</i> arguments, only changes in that part of the
+  tree are committed.
+
+
+
+
+
+  
+  
+  
+    <h3><b><code>get</code> <i>name</i></b>
+</h3>
+    <p>
+      Retrieve the named revision.
+
+
+
+
+
+  
+  
+  
+    <h3><b><code>name</code> [<i>new-value</i>]</b>
+</h3>
+    <p>
+      Each <code>commit</code> operation stores a new tree snapshot
+  and assigns that snapshot a symbolic name.
+
+
+
+
+    <p>
+      The <code>name</code> command reports (or with an argument sets) the name
+  that will be assigned to the next snapshot taken by <code>commit</code>
+  for the tree containing the current directory.
+
+
+
+
+
+  
+  
+  
+    <h3><b><code>manifest</code></b>
+</h3>
+    <p>
+      Report the list of files at or below the current directory
+  that are in <code>revc</code>'s list of files to be considered by the
+  <code>commit</code> command.
+
+
+
+
+
+  
+  
+  
+    <h3><b><code>add</code> <i>file</i></b>, <b><code>del</code> <i>file</i></b>, and <b><code>rename</code> <i>from</i> <i>to</i></b>
+</h3>
+    <p>
+      These commands modify the list of files reported by <code>manifest</code>.<b></b>
+
+
+    <p>
+      Store a snapshot of the tree in your chosen archive, assigning it
+  the default name.
+
+
+
+
+
+  
+  
+  
+    <h3><b><code>ancestor</code> <i>ORIG</i> <i>MOD</i></b>
+</h3>
+    <p>
+      Given the names of two tree snapshots, report the name of a third
+  tree which is a good choice as an <i>ANCESTOR</i> tree for use during
+  three way merges.
+
+
+
+
+  
+  
+  
+    <h3><b><code>ancestry</code> <i>name</i></b>
+</h3>
+    <p>
+      Report the history of ancestors and merges that have occured
+  to the named tree.
+
+
+
+
+
+  
+  
+  
+    <h3><b><code>prereqs</code> <i>names</i></b>
+</h3>
+    <p>
+      Report or set the commit prereqs of a tree.
+
+
+
+
+
+  
+  
+
+
+
+  <h2>General Properties
+</h2>
+  <p>
+    Your archive (the collection of tree snapshots) is stored in a 
+  reasonably space-efficient way as an ordinary tree of files.
+
+
+
+
+  <p>
+    Snapshots are cryptographically verifiable and have
+  handy human-readable fingerprint strings suitable for
+  cyrpotgraphic signing.
+
+
+
+
+  <p>
+    You can safely mirror your archive using programs such as <code>rsync</code>.
+
+
+
+
+  <p>
+    Individual snapshots each occupy a separate subdirectory in your
+  archive -- it safe to copy or move these between archives.
+
+
+
+
+  <p>
+    Access to individual files from history is very fast.
+
+
+
+
+  <p>
+    It is safe to delete revisions from your archive.
+
+
+
+
+  <p>
+    It is safe to use the same symbolic name for a revision twice.
+
+
+
+
+  <p>
+    Many convenience commands or operations are needed -- the core
+  commands are &quot;core&quot; because they keep the model simple but
+  I don't claim they are the last word in UI design.
+
+
+
+
+  <p>
+    Many details are omitted from the descriptions above -- for example,
+  how to use <code>get</code> to get just a single file or a partial tree;  how
+  to use <code>commit</code> to commit changes in just part of a tree.
+
+
+
+
+  <p>
+    Because this is an early release, not all of the functionality of
+  the core commands is present -- just enough to begin attempts at
+  self-hosting.
+
+
+
+
+
+
+
+
+  <h2>Copyright
+</h2>
+  <p>
+    Copyright <b>(C)</b> 2005 Tom Lord (<code>lord@emf.net</code>)
+
+
+
+
+  <p>
+    This program is free software; you can redistribute it and/or modify
+  it under the terms of the <b>GNU General Public License</b> as published by
+  the Free Software Foundation; either version 2, or (at your option)
+  any later version.
+
+
+
+
+  <p>
+    This program is distributed in the hope that it will be useful,
+  but <b><big>WITHOUT ANY WARRANTY</big></b>; without even the implied warranty of
+  <b><big>MERCHANTABILITY</big></b> or <b><big>FITNESS FOR A PARTICULAR PURPOSE</big></b>.  See the
+  <b>GNU General Public License</b> for more details.
+
+
+
+
+  <p>
+    You should have received a copy of the <b>GNU General Public License</b>
+  along with this software; see the file <a href="../COPYING.html"><code>COPYING</code></a>.  If not, write to the Free Software Foundation, 675
+  Mass Ave, Cambridge, MA 02139, USA.
+
+
+
+
+
+    </div>
+
+    <div class="navLeft">
+
+<p>
+  <a href="../index.html">home</a>
+
+
+
+
+    </div>
+
+  </body>
+</html>

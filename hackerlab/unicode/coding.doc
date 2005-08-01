@@ -1,0 +1,61 @@
+/* tag: Tom Lord Tue Dec  4 14:57:16 2001 (coding.doc)
+ */
+/************************************************************************
+ *(h1 "Naming Unicode Coding Forms"
+ *    :include ("hackerlab/unicode/coding.h"))
+ * 
+ */
+
+
+/*(c uni_encoding_schemes :category type)
+ * enum uni_encoding_schemes;
+ *
+ * Values of the enumerated type `uni_encoding_schemes' are used in
+ * interfaces throughout the Hackerlab C library to identify encoding
+ * schemes for strings or streams of Unicode characters.  (See
+ * xref:"An Absurdly Brief Introduction to Unicode".)
+ *
+ *      enum uni_encoding_schemes
+ *       {
+ *         uni_iso8859_1,
+ *         uni_utf8,
+ *         uni_utf16,
+ *         uni_utf16be,
+ *         uni_utf16le,
+ *         uni_utf32,
+ *         uni_utf32be,
+ *         uni_utf32le,
+ *         uni_bogus32,
+ *         uni_bogus32be,
+ *         uni_bogus32le,
+ *       };
+ *
+ * `uni_iso8859_1' refers to a degenerate encoding scheme.  Each
+ * character is stored in one byte.  Only characters in the
+ * range `U+0000 .. U+00FF' can be represented.
+ *
+ * `uni_utf8' refers to the UTF-8 encoding scheme.
+ *
+ * `uni_utf16' refers to UTF-16 in the native byte order of
+ * the machine.
+ *
+ * `uni_utf16be' refers to UTF-16, explicitly in big-endian order.
+ *
+ * `uni_utf16le' refers to UTF-16, explicitly in little-endian order.
+ *
+ * `uni_utf32' refers to UTF-32 in the native byte order of
+ * the machine.
+ *
+ * `uni_utf32be' refers to UTF-32, explicitly in big-endian order.
+ *
+ * `uni_utf32le' refers to UTF-32, explicitly in little-endian order.
+ *
+ * The `bogus' encodings, `uni_bogus32', `uni_bogus32be', and
+ * `uni_bogus32le', refer to a special 32-bit encoding in which
+ * characters outside of the range of Unicode (larger than 21 bits)
+ * are permitted.  For example, some subsystems use this to implement
+ * loss-less processing of UTF-8 or UTF-16 texts where those texts may
+ * contain illegal encoding forms (by mapping the illegal coding units
+ * into pseudo-characters outside of the range of Unicode).
+ */
+

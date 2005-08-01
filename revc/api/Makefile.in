@@ -1,0 +1,5 @@
+
+include $(makefiles)/library-objects.mk
+
+# arch-tag: Tom Lord Thu Jun 23 12:10:12 2005 (api/Makefile.in)
+#

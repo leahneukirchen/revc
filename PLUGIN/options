@@ -1,0 +1,28 @@
+;; Syntax examples:
+;; 
+;; 
+;; binary	shared-library		no
+;; 	Build a shared library?
+;; 
+;; binary	static-library		yes
+;; 	Build a static library?
+;; 
+;; string  admin-email		root
+;; 	To what email address should administrative
+;; 	notifications be sent?
+;; 
+
+
+string		posix-shell		/bin/sh
+	What program should be used to execute
+	POSIX.2 shell scripts?
+
+string		cc			cc
+	What command name should be used to invoke the
+	C compiler?
+
+string		package-framework-bug-mail	lord@emf.net
+	To what email address should package-framework bug reports be
+	sent?
+
+

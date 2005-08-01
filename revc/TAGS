@@ -1,0 +1,442 @@
+
+api/constants.h,707
+#define INCLUDE__LIBREVC__CONSTANTS_H11,271
+#define REVC_MAX_FNAME_SIZE	14,312
+#define REVC_MAX_BLOB_ADDR_SIZE	15,345
+#define REVC_MAX_METADATA_SIZE	16,382
+#define REVC_DIR_ENTRY_SIZE	18,419
+#define REVC_DIR_ENTRY_FNAME(REVC_DIR_ENTRY_FNAME22,610
+#define REVC_DIR_ENTRY_BLOB_ADDR(REVC_DIR_ENTRY_BLOB_ADDR23,647
+#define REVC_DIR_ENTRY_METADATA(REVC_DIR_ENTRY_METADATA24,711
+#define REVC_TMP_FILE_DATA_CACHE	27,802
+#define REVC_FILE_DATA_CACHE	28,854
+#define REVC_FILE_DATA_CACHE_KEY_SIZE	29,901
+#define REVC_FILE_DATA_CACHE_ENTRY_SIZE	31,944
+#define REVC_INITIAL_MANIFEST	34,1086
+#define REVC_INITIAL_ANCESTRY	38,1259
+#define REVC_NIL_TICKET 41,1412
+#define REVC_NIL_COMMIT_TICKET 47,1604
+
+api/find-root.c,23
+revc_find_root 21,438
+
+api/find-root.h,45
+#define INCLUDE__LIBREVC__FIND_ROOT_H11,271
+
+api/init.c,18
+revc_init 20,432
+
+api/init.h,40
+#define INCLUDE__LIBREVC__INIT_H11,261
+
+api/inventory-skip.c,28
+revc_inventory_skip 17,318
+
+api/inventory-skip.h,50
+#define INCLUDE__LIBREVC__INVENTORY_SKIP_H11,281
+
+api/lint.c,73
+struct show_closureshow_closure35,941
+revc_lint 48,1145
+show 92,2623
+
+api/lint.h,117
+#define INCLUDE__CMDS__LINT_LOOP_MAIN_H11,278
+typedef int (*t_revc_lint_callback_fn)t_revc_lint_callback_fn18,362
+
+api/list-find.c,23
+revc_list_find 18,352
+
+api/list-find.h,45
+#define INCLUDE__LIBREVC__LIST_FIND_H11,271
+
+api/list-find-subdir.c,30
+revc_list_find_subdir 24,451
+
+api/list-find-subdir.h,48
+#define INCLUDE__API__LIST_FIND_SUBDIR_H11,281
+
+api/listing-show-minus-nl-sep.c,39
+revc_listing_show_minus_nl_sep 17,404
+
+api/listing-show-minus-nl-sep.h,57
+#define INCLUDE__API__LISTING_SHOW_MINUS_NL_SEP_H11,299
+
+api/listing-show-minus-zero-sep.c,41
+revc_listing_show_minus_zero_sep 17,408
+
+api/listing-show-minus-zero-sep.h,59
+#define INCLUDE__API__LISTING_SHOW_MINUS_ZERO_SEP_H11,303
+
+api/listing-show-nl-sep.c,33
+revc_listing_show_nl_sep 16,363
+
+api/listing-show-nl-sep.h,55
+#define INCLUDE__LIBREVC__LISTING_SHOW_NL_SEP_H11,291
+
+api/listing-show-plus-nl-sep.c,38
+revc_listing_show_plus_nl_sep 17,402
+
+api/listing-show-plus-nl-sep.h,56
+#define INCLUDE__API__LISTING_SHOW_PLUS_NL_SEP_H11,297
+
+api/listing-show-plus-zero-sep.c,40
+revc_listing_show_plus_zero_sep 17,406
+
+api/listing-show-plus-zero-sep.h,58
+#define INCLUDE__API__LISTING_SHOW_PLUS_ZERO_SEP_H11,301
+
+api/listing-show-sep.c,31
+revc__listing_show_sep 16,349
+
+api/listing-show-sep.h,52
+#define INCLUDE__LIBREVC__LISTING_SHOW_SEP_H11,285
+
+api/listing-show-zero-sep.c,35
+revc_listing_show_zero_sep 16,367
+
+api/listing-show-zero-sep.h,57
+#define INCLUDE__LIBREVC__LISTING_SHOW_ZERO_SEP_H11,295
+
+api/list-merge.c,24
+revc_list_merge 19,450
+
+api/list-merge.h,42
+#define INCLUDE__API__LIST_MERGE_H11,269
+
+api/list-rename.c,50
+revc_list_rename 28,778
+insert_renamed 179,4793
+
+api/list-rename.h,43
+#define INCLUDE__API__LIST_RENAME_H11,271
+
+api/list-subtract.c,27
+revc_list_subtract 19,456
+
+api/list-subtract.h,45
+#define INCLUDE__API__LIST_SUBTRACT_H11,275
+
+api/lsr.c,103
+struct show_unignored_closureshow_unignored_closure34,966
+revc_lsr 43,1076
+show_unignored 101,2645
+
+api/lsr.h,89
+#define INCLUDE__LIBREVC__LSR_H11,259
+typedef int (*t_revc_lsr_fn)t_revc_lsr_fn16,332
+
+api/manifest-setup.c,28
+revc_manifest_setup 19,454
+
+api/manifest-setup.h,46
+#define INCLUDE__API__MANIFEST_SETUP_H11,277
+
+api/opts.c,18
+revc_opts 19,355
+
+api/opts.h,163
+#define INCLUDE__LIBREVC__OPTS_H11,261
+#define REVC_END_OPTS 16,335
+#define REVC_FLAG_OPT 17,359
+#define REVC_ARG_OPT 18,383
+struct revc_optsrevc_opts21,409
+
+api/pathlist-from-argv.c,32
+revc_pathlist_from_argv 19,469
+
+api/pathlist-from-argv.h,50
+#define INCLUDE__API__PATHLIST_FROM_ARGV_H11,285
+
+api/qsort-traversal-cmp.c,33
+revc_qsort_traversal_cmp 15,329
+
+api/qsort-traversal-cmp.h,51
+#define INCLUDE__API__QSORT_TRAVERSAL_CMP_H11,287
+
+api/traversal-cmp.c,27
+revc_traversal_cmp 15,317
+
+api/traversal-cmp.h,45
+#define INCLUDE__API__TRAVERSAL_CMP_H11,275
+
+api/traverse-subtree.c,73
+revc_traverse_subtree 36,1015
+traverse 55,1588
+qsort_str_cmp 121,3498
+
+api/traverse-subtree.h,112
+#define INCLUDE__LIBREVC__TRAVERSE_SUBTREE_H11,285
+typedef int (*t_revc_traverse_fn)t_revc_traverse_fn18,374
+
+cmds/revc-add.c,13
+main 16,273
+
+cmds/revc-ancestors.c,13
+main 16,285
+
+cmds/revc-commit.c,13
+main 16,279
+
+cmds/revc-del.c,13
+main 16,273
+
+cmds/+revc-get.c,14
+main 42,1109
+
+cmds/revc-get.c,13
+main 16,273
+
+cmds/revc-ign.c,13
+main 16,273
+
+cmds/revc-ignored.c,13
+main 15,317
+
+cmds/revc-init.c,13
+main 14,269
+
+cmds/revc-lint.c,13
+main 16,275
+
+cmds/revc-lsr.c,13
+main 14,272
+
+cmds/revc-manifest.c,13
+main 15,314
+
+cmds/revc-missing.c,13
+main 16,281
+
+cmds/revc-new.c,13
+main 16,273
+
+cmds/revc-rename.c,13
+main 16,279
+
+cmds/revc-unign.c,13
+main 16,277
+
+deps/archive-path.c,26
+revc_archive_path 21,456
+
+deps/archive-path.h,48
+#define INCLUDE__LIBREVC__ARCHIVE_PATH_H11,277
+
+deps/chdir.c,19
+revc_chdir 15,296
+
+deps/chdir.h,38
+#define INCLUDE__DEPS__CHDIR_H11,260
+
+deps/create-empty-file.c,31
+revc_create_empty_file 15,320
+
+deps/create-empty-file.h,50
+#define INCLUDE__DEPS__CREATE_EMPTY_FILE_H11,283
+
+deps/cwd.c,17
+revc_cwd 15,297
+
+deps/cwd.h,36
+#define INCLUDE__DEPS__CWD_H11,256
+
+deps/ensure-dir-exists.c,31
+revc_ensure_dir_exists 20,441
+
+deps/ensure-dir-exists.h,53
+#define INCLUDE__LIBREVC__ENSURE_DIR_EXISTS_H11,287
+
+deps/error.c,19
+revc_error 15,297
+
+deps/error.h,41
+#define INCLUDE__LIBREVC__ERROR_H11,263
+
+deps/file-is-dir.c,25
+revc_file_is_dir 15,316
+
+deps/file-is-dir.h,44
+#define INCLUDE__DEPS__FILE_IS_DIR_H11,271
+
+deps/get-to-string.c,27
+revc_get_to_string 15,312
+
+deps/get-to-string.h,46
+#define INCLUDE__DEPS__GET_TO_STRING_H11,276
+
+deps/list-cwd.c,22
+revc_list_cwd 17,367
+
+deps/list-cwd.h,41
+#define INCLUDE__DEPS__LIST_CWD_H11,266
+
+deps/mkdir.c,19
+revc_mkdir 15,296
+
+deps/mkdir.h,38
+#define INCLUDE__DEPS__MKDIR_H11,260
+
+deps/put-from-str.c,26
+revc_put_from_str 15,310
+
+deps/put-from-str.h,45
+#define INCLUDE__DEPS__PUT_FROM_STR_H11,274
+
+deps/rename.c,20
+revc_rename 15,298
+
+deps/rename.h,39
+#define INCLUDE__DEPS__RENAME_H11,262
+
+deps/restore-dir.c,25
+revc_restore_dir 15,308
+
+deps/restore-dir.h,44
+#define INCLUDE__DEPS__RESTORE_DIR_H11,272
+
+deps/rmrf.c,18
+revc_rmrf 22,476
+
+deps/rmrf.h,43
+#define INCLUDE__LIBFSUTILS__RMRF_H11,263
+
+deps/save-dir.c,22
+revc_save_dir 15,302
+
+deps/save-dir.h,134
+#define INCLUDE__DEPS__SAVE_DIR_H11,266
+typedef int t_revc_cwd_buffer;t_revc_cwd_buffer16,341
+#define REVC_CWD_BUFFER_INIT 18,373
+
+deps/usage.c,19
+revc_usage 16,298
+
+deps/usage.h,41
+#define INCLUDE__LIBREVC__USAGE_H11,263
+
+deps/write.c,19
+revc_write 15,296
+
+deps/write.h,41
+#define INCLUDE__LIBREVC__WRITE_H11,263
+
+librevc/+manifest.c,22
+revc_manifest 21,456
+
+mains/add-main.c,22
+revc_add_main 15,318
+
+mains/add-main.h,42
+#define INCLUDE__MAINS__ADD_MAIN_H11,267
+
+mains/adjust-inventory-main.c,93
+const t_uchar * const revc_adjust_inventory_usage 24,638
+revc_adjust_inventory_main 27,707
+
+mains/adjust-inventory-main.h,55
+#define INCLUDE__MAINS__ADJUST_INVENTORY_MAIN_H11,293
+
+mains/ancestors-main.c,78
+const t_uchar * const revc_manifest_usage 23,600
+revc_ancestors_main 26,670
+
+mains/ancestors-main.h,48
+#define INCLUDE__MAINS__ANCESTORS_MAIN_H11,279
+
+mains/commit-main.c,73
+const t_uchar * const revc_commit_usage 16,370
+revc_commit_main 19,421
+
+mains/commit-main.h,45
+#define INCLUDE__MAINS__COMMIT_MAIN_H11,273
+
+mains/del-main.c,22
+revc_del_main 15,318
+
+mains/del-main.h,42
+#define INCLUDE__MAINS__DEL_MAIN_H11,267
+
+mains/get-main.c,67
+const t_uchar * const revc_get_usage 16,364
+revc_get_main 19,412
+
+mains/get-main.h,42
+#define INCLUDE__MAINS__GET_MAIN_H11,267
+
+mains/ign-main.c,22
+revc_ign_main 15,318
+
+mains/ign-main.h,42
+#define INCLUDE__MAINS__IGN_MAIN_H11,267
+
+mains/ignored-main.c,26
+revc_ignored_main 15,315
+
+mains/ignored-main.h,46
+#define INCLUDE__MAINS__IGNORED_MAIN_H11,274
+
+mains/init-main.c,69
+const t_uchar * const revc_init_usage 21,521
+revc_init_main 24,575
+
+mains/init-main.h,45
+#define INCLUDE__LIBREVC__INIT_MAIN_H11,271
+
+mains/invlist-main.c,76
+const t_uchar * const revc_manifest_usage 23,604
+revc_invlist_main 26,674
+
+mains/invlist-main.h,46
+#define INCLUDE__MAINS__INVLIST_MAIN_H11,274
+
+mains/lint-loop-main.c,73
+const t_uchar * revc_lint_loop_usage 30,849
+revc_lint_loop_main 33,914
+
+mains/lint-loop-main.h,47
+#define INCLUDE__CMDS__LINT_LOOP_MAIN_H11,278
+
+mains/lint-main.c,23
+revc_lint_main 15,313
+
+mains/lint-main.h,43
+#define INCLUDE__MAINS__LINT_MAIN_H11,269
+
+mains/lsr-main.c,67
+const t_uchar * const revc_lsr_usage 22,564
+revc_lsr_main 25,629
+
+mains/lsr-main.h,41
+#define INCLUDE__CMDS__LSR_MAIN_H11,266
+
+mains/manifest-main.c,27
+revc_manifest_main 15,317
+
+mains/manifest-main.h,47
+#define INCLUDE__MAINS__MANIFEST_MAIN_H11,276
+
+mains/missing-main.c,26
+revc_missing_main 15,319
+
+mains/missing-main.h,46
+#define INCLUDE__MAINS__MISSING_MAIN_H11,275
+
+mains/new-main.c,22
+revc_new_main 15,311
+
+mains/new-main.h,42
+#define INCLUDE__MAINS__NEW_MAIN_H11,267
+
+mains/rename-main.c,73
+const t_uchar * const revc_rename_usage 28,667
+revc_rename_main 31,725
+
+mains/rename-main.h,45
+#define INCLUDE__MAINS__RENAME_MAIN_H11,273
+
+mains/unign-main.c,24
+revc_unign_main 15,322
+
+mains/unign-main.h,44
+#define INCLUDE__MAINS__UNIGN_MAIN_H11,271

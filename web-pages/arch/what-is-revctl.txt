@@ -1,0 +1,145 @@
+[[title
+                      What is Revision Control?
+]]
+
+
+  As used in software development, a revision control system is a tool
+  for recording, indexing and manipulating the changes (revisions) made
+  to the source code of a software system.
+
+  For example, let's suppose that Alice and Bob will be working on the
+  program `sort' -- perhaps they intend to fix some bugs and add a new
+  feature for handling very long input lines. They agree that Alice
+  will fix the bugs and Bob will add the feature.  
+
+* Cooperating Programmers Need to Combine their Changes
+
+  One straw-man idea -- certainly a poor idea -- is that they make a
+  single copy of `sort', both fire up their editors, and they just make
+  changes to that single copy.
+
+  This idea won't work well for many reasons but some of the most
+  obvious are: what happens if they want to edit the same file, at the
+  same time? What happens if Alice wants to compile and test a
+  bug-fix, but Bob is in the middle of working on the new feature and
+  his changes won't even compile?
+
+  Instead, each programmer should work on a separate copy but then
+  they need some way to combine their efforts.  
+
+
+* `diff' and `patch' Do the Job, but Crudely
+
+  A second idea -- workable, but with problems of its own -- is that
+  Alice and Bob will use the programs `diff' and `patch' to combine their
+  work. For example, having fixed a bug, Alice will use `diff' to extract
+  a description of the changes she made. She can give the output from
+  `diff' to Bob who can then use `patch' to add those changes to his copy of
+  the tree.
+
+  Cooperating on a program by exchanging `diff' output and using `patch' can
+  get the job done. Many (especially small) projects have worked this
+  way. Even today, many projects that internally use revision control
+  still use `diff' and `patch' when cooperating with "external
+  contributors".
+
+  Still, this approach has its limitations and drawbacks. An example
+  of a limitation is the problem of renaming files. Suppose that
+  Alice, while fixing a bug, had decided to reorganize the source a
+  little bit -- to make it easier to maintain. Perhaps she has created
+  some new subdirectories and moved files around among them. `diff'
+  and `patch' will not cope with this situation gracefully. Alice can
+  not easily (or necessarily at all) generate `diff' output that Bob
+  will find useful. An unfortunate consequence is that Alice is
+  therefore likely to not reorganize the source in the first place --
+  whatever is gained in future ease of maintenance is hard to justify
+  given the immediate difficulties it will create working with Bob.
+
+  An example of a drawback of the `diff/patch' approach is the
+  *cherry-picking problem*. Let's suppose that Alice has prepared 10
+  bug fixes. Of these, 5 are known to be very good, but 5 haven't yet
+  been tested and there is a suspician that they create new
+  problems. Meanwhile, Bob would like to test his new feature code in
+  the context of the known-good bug-fixes from Alice. He wants five of
+  her changes, but not the other five.
+
+  For Bob to solve this problem, he'll need to ask Alice to produce
+  `diff' output for just the 5 known-good fixes and nothing else. To be
+  able to do that easily, Alice will have to have done a lot of
+  bookkeeping in her work -- to have kept around enough information to
+  go back and extract just the known-good changes. And Bob will have
+  to do a lot of bookkeeping too -- to keep track of which of Alice's
+  changes he's taken and which not. With just two programmers, all of
+  this bookkeeping is bad enough. With more programmers, and with more
+  instances of this problem than just Bob's immediate need, the amount
+  of bookkeeping quickly becomes impractical.
+
+  As a result of drawbacks like that, projects that use only the
+  `diff/patch' approach tend to be either very small, or very out of
+  control. When out of control, they have difficulty quickly and
+  reliably producing versions for release, isolating regressions, and
+  so forth.
+
+  So, Alice and Bob need something similar to the `diff/patch' approach
+  -- but that doesn't require quite so much bookkeeping and that doesn't
+  discourage making improvements such as reorganizing source files.  
+
+* The Solution: Modern Revision Control
+
+  Modern revision control systems could be fairly described as
+  improving and automating the `diff/patch' approach to programmer
+  cooperation. Roughly speaking, modern revision control systems:
+
+  \1. Record and Catalog `diff'-like Changes:\ Whenever Alice or Bob does
+     a "unit of work" -- such as make incremental progress fixing a
+     bug -- they can ask the revision control system to commit that
+     work. The commit process involves creating a `diff'-like
+     description of the new changes, attaching them to a
+     programmer-supplied description of the nature and purpose of the
+     changes, assigning a standard-form name to the changes (similar
+     to the call number on a library book), and archiving the changes
+     where they can be retrieved later. Query tools allow programmers
+     or managers to view the changes that have been recorded and the
+     descriptions provided of them.
+
+  \2. Play-back and Combine Changes in Flexible Ways:\ Given an
+     organized record of changes, problems such as Bob's cherry-picking
+     need become easier to solve. Modern revision control tools give users
+     flexible mechanisms that can be used for tasks such as "Create a tree
+     that combines Bob's latest feature work with Alice's bug-fixes 1, 3,
+     5, 6, and 8." Recording Alice's and Bob's changes separately in the
+     first place is called branching and combining them is called
+     merging. It's the same problem that can be solved using just `diff' and
+     `patch' -- but modern revision control systems contain features that
+     automate this rather complex and error-prone process.  
+
+
+* Postscript: *"Hey, that's not CVS!"*
+
+  To people accustomed with older revision control systems, especially
+  something like CVS, this definition of modern revision control may
+  seem unfamiliar and a bit odd. Many people think of revision control
+  as a tool that "gives access to historic version" and as a fancy
+  kind of database where programmers `checkin' changes that are
+  combined with the changes of others. Indeed, most older systems (and
+  some contemporary ones) make it very difficult, at best, catalog
+  individual changes (such as one of Alice's bug-fixes) or to combine
+  changes in flexible ways (such as to solve Bob's cherry-picking
+  problem).
+
+  Modern systems have the basic capabilities of older systems like
+  CVS, but much more beyond those. Whereas CVS makes branching and
+  merging difficult, modern systems make it a natural way to
+  work. Whereas older systems do not help much with cataloging logical
+  changes that may effect multiple files, modern systems use that
+  capability as a foundation. In essense, the familliar capabilities
+  of older systems ("checkin" and "access to historic versions") are
+  just special cases of the basic functionality of modern systems
+  ("recording and cataloging changes" and "playing-back and combining
+  changes in flexible ways").
+
+
+[[null
+  ; arch-tag: Tom Lord Sun Nov 21 23:00:34 2004 (writings/what-is-revctl.txt)
+]]
+

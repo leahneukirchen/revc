@@ -1,0 +1,34 @@
+# Makefile.in
+#
+################################################################
+# Copyright (C) 2003 Tom Lord
+# 
+# See the file "COPYING" for further information about
+# the copyright and warranty status of this work.
+# 
+
+
+shell-scripts	:=	remove-links.sh make-links.sh
+
+include $(makefiles)/shell-scripts.mk
+
+ifeq ($(cfg__install_link_tools),1)
+include $(makefiles)/install-shell-scripts.mk
+endif
+
+remove-links.sh: remove-links.sh.in
+	sed -e "s,@BUGMAIL@,$(cfg__links_bug_mail)," \
+	    $< > remove-links.sh
+make-links.sh: make-links.sh.in
+	sed -e "s,@BUGMAIL@,$(cfg__links_bug_mail)," \
+	    $< > make-links.sh
+
+clean: clean-derive-link-scripts
+
+clean-derive-link-scripts:
+	-rm remove-links.sh
+	-rm make-links.sh
+
+# arch-tag: Tom Lord Tue Dec  4 14:52:14 2001 (arch/Makefile.in)
+#
+

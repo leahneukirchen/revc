@@ -1,0 +1,22 @@
+# tag: Tom Lord Tue Dec  4 15:05:30 2001 (uni-tests/DESC)
+#
+
+We test the installed header files to make sure they compile.
+
+unit-coding, unit-cvt
+
+	Both programs convert between UTF-8, UTF-16 and UTF-32.
+
+	unit-cvt is based on "ConvertUTF.c" (called "cvtutf.c" here).
+	ConvertUTF.c is distributed on the CD-ROM that comes with the
+	Unicode standard and from the unicode.org web site (we took it
+	from there). It is used here as a reference implementation of
+	conversions.
+
+	unit-coding is based on the conversion functions in
+	"hackerlab/uni/coding.h".
+
+	unit-coding.sh converts a UTF-8 file to UTF-16 and UTF-32, and
+	back again, using both native and non-native byte order,
+	comparing the results produced by the two programs.
+

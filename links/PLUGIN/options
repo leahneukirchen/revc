@@ -1,0 +1,9 @@
+
+string		links-bug-mail	lord@emf.net
+	To what email address should links bug reports 
+        be sent?
+
+binary		install-link-tools       no
+	If true, make-links and remove-links will be 
+        installed.
+

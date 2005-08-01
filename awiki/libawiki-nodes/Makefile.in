@@ -1,0 +1,10 @@
+
+include $(makefiles)/library-objects.mk
+
+ifeq ($(cgs__install_awiki),1)
+include $(makefiles)/install-includes.mk
+endif
+
+# arch-tag: Tom Lord Sun Oct 31 09:27:45 2004 (libawiki-nodes/Makefile.in)
+#
+

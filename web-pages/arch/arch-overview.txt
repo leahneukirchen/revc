@@ -1,0 +1,124 @@
+[[title
+                       An Overview of GNU Arch
+                                 ---
+                 A Brief Description of the `GNU Arch'
+                       Revision Control System
+]]
+
+
+  Below is a brief list of the features that most distinguish Gnu Arch
+  from competing systems. This list presumes that you are somewhat
+  familiar with revision control systems in general. (See also, 
+  <"What is Revision Control?" -- ./what-is-revctl.html>)  
+
+
+* Whole Tree Changesets: Atomic Commits and Add/Delete/Rename Handling
+
+  Transactions in Gnu Arch are on *whole source trees*. For example,
+  let's suppose that you modify three files in order to fix a
+  bug. When you commit this change, you commit all three files at
+  once. Arch records a new revision that contains exactly the
+  modifications to those three files (relative to some earlier
+  revision).
+
+  Atomic, whole-tree commits are very convenient. To continue the
+  example: you could record the name of the new revision in your bug
+  database as the revision that contains the bug-fix. Or you could
+  send the name of the new revision to a fellow-programmer, who can
+  then merge exactly those changes and no others into his own
+  branch. A project maintainer can ask arch to display exactly those
+  changes in order to review your work.
+
+  Whole tree changesets in Arch correctly handle file, directory, and
+  symbolic link additions, removals, and renames. "Correctly handle"
+  means not only that such changes are recorded as part of the
+  changeset, but also that you can merge changes back and forth
+  between versions that do and do not have those tree-structure
+  changes, and the merging process will take that into account.
+
+* Symbolic Revision Names
+
+  Arch assigns revisions meaningful, symbolic names that are globally
+  unique among a community of arch users. Thus, it is always possible
+  to refer unambiguously to any given revision, in any Arch
+  archive. Strange annoyances such as CVS's "even/odd length" branch
+  and revision numbering scheme or Subversions global repository
+  revision number are avoided in Arch.
+
+* Easy Branching and Smart Merging
+
+  Creating a branch in Arch can be accomplished with a single, fast command.
+
+  Merging between branches in Arch is *history sensitive* which means
+  that Arch helps to avoid spurious merge conflicts by avoiding
+  redundent merges whenever it can.
+
+  In fact, there are *many* different kinds of merging that are useful
+  in the world (e.g., CVS-like updates, cherry-picking,
+  vendor-branch-style tracking, mutual 3-way merges between
+  branches...). Rather than provide just one merge command, Arch
+  provides a *toolbox* of several merge commands, allowing you to pick
+  the right tool for each job.
+
+* Versioned Tagging
+
+  Tags in Arch are as easy to create as branches (in fact, the same
+  mechanism is used).
+
+  Tags can be "moved" in Arch and, when the are, data about their old
+  location is preserved. In other words, tags are revision controlled
+  just like source.
+
+* Lightweight, Standard Servers; Simple On-disk Formats
+
+  Arch uses a collection of stone-simple on-disk formats for archives
+  and ancillary databases. It does not require or use a relational
+  database, hash-table database, object database, or CVS-like ",v"
+  files.
+
+  Consequently, creating a new local archive is utterly trivial: a
+  single arch command does it, basically by creating some new
+  directories.
+
+  And, consequently, remote archives *do not require an Arch specific
+  server!* Your existing /`SFTP'/, /`FTP'/, or /`WebDav'/ server can
+  be used as an Arch server. Your existing /`HTTP'/ server can be used
+  as a read-only Arch server.
+
+* Distributed Operation
+
+  Branches, in Arch, are not required to be in the same archive as the
+  branched-from version. In fact, creating a branch requires nothing
+  more than read-only access to the branched-from version.
+
+  Operation across archive boundaries in Arch is essentially seemless:
+  commands operate equally well on local and remote archives and on
+  versions scattered across multiple archives.
+
+  For public and inter-organizational development projects distributed
+  operation is an especially valuable feature: contributors can form
+  and publish their work on their own branches of your mainline
+  sources -- without requiring that they have write access to your
+  archive. You can merge in their changes as easily as if they had
+  been committed to your own archives.
+
+* Integrity Checking and Signed Revisions
+
+  Archive revisions are protected against storage-media corruption by
+  checksum files which are verified during ever
+  retrieval. Additionally, committed revisions can be
+  cryptographically signed by their creators, and those signatures
+  verified on retrieval.
+
+* Easy Mirroring
+
+  It is trivial to set-up and incrementally update read-only mirrors
+  of any arch archive. A common pattern of use in public projects is
+  to improve performance by creating private local copies of remote
+  archives.
+
+
+[[null
+  arch-tag: Tom Lord Mon Nov 22 09:16:09 2004 (writings/overview.txt)
+]]
+

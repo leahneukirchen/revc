@@ -1,0 +1,36 @@
+/* tag: Tom Lord Tue Dec  4 14:57:15 2001 (hashing.doc)
+ */
+/************************************************************************
+ *(h0 "Hashing")
+ * 
+
+Hash values and hash tables are useful in many programs.  The
+Hackerlab C Library provides:
+
+\hash utilities/ -- functions for computing hash values in common
+situations.  Hash functions for strings can be found elsewhere. (For
+strings of 8-bit characters, see xref:"Computing Hash Values From
+Strings".  For Unicode strings, see *XREF*.)
+
+\an md5 implementation/ -- functions to compute an md5 digest 
+of an arbitrary string of bytes.
+
+\hash tables/ -- a general-purpose implementation of variably sized
+hash tables.
+
+ */
+/*(menu)
+ */
+/*(include-documentation "hash-utils.c")
+ */
+
+/*(include-documentation "md5-utils.c")
+ */
+
+/*(include-documentation "md5.c")
+ */
+
+
+/*(include-documentation "hashtree.c")
+ */
+

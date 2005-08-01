@@ -1,0 +1,42 @@
+libs			:=	../librevc/librevc.a \
+				../../libsha1/libsha1.a \
+				../../libdiff/libdiff.a \
+				../../hackerlab/libhackerlab/libhackerlab.a \
+				-lz \
+				-lm 
+
+mains			:=	revc-add.c \
+				revc-ancestry.c \
+				revc-blob.c \
+				revc-commit.c \
+				revc-changes.c \
+				revc-del.c \
+				revc-get.c \
+				revc-ign.c \
+				revc-ignored.c \
+				revc-init.c \
+				revc-lint.c \
+				revc-lsr.c \
+				revc-manifest.c \
+				revc-missing.c \
+				revc-name.c \
+				revc-new.c \
+				revc-rename.c \
+				revc-root.c \
+				revc-prereqs.c \
+				revc-unign.c \
+				revc-uz.c \
+				revc-z.c 
+
+
+#				revc-bones.c \
+
+
+
+include $(makefiles)/library.mk
+include $(makefiles)/programs.mk
+include $(makefiles)/install-programs.mk
+
+
+# arch-tag: Tom Lord Thu Jun 16 15:42:32 2005 (cmds/Makefile.in)
+#

@@ -1,0 +1,22 @@
+/* alloca.h.in:
+ *
+ ****************************************************************
+ * Copyright (C) 2003 Tom Lord
+ * 
+ * See the file "COPYING" for further information about
+ * the copyright and warranty status of this work.
+ */
+
+#ifndef INCLUDE__OS__ALLOCA_H
+#define INCLUDE__OS__ALLOCA_H
+
+
+@@@
+
+
+/* automatically generated __STDC__ prototypes */
+#endif  /* INCLUDE__OS__ALLOCA_H */
+
+
+/* tag: Tom Lord Sat Jan  5 15:26:10 2002 (alloca.h.in)
+ */

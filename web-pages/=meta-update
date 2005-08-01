@@ -1,0 +1,14 @@
+
+
+echo "updating ."
+sh =update
+
+subdirs="arch revc"
+
+for f in $subdirs; do
+  echo "updating $f"
+  (cd $f && sh =update)
+done
+
+# arch-tag: Tom Lord Fri Dec 17 11:06:52 2004 (tla-ws/=meta-update)
+

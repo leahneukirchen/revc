@@ -1,0 +1,132 @@
+  [[title
+               A Quick Intro to Core Arch 2.0 Commands
+  ]]
+
+* Core Commands
+
+  Arch 2.0 has only a few core commands.
+
+  These are:
+
+
+** /`init' [*directory*]/
+
+  Create a `.revc' subdir in *directory* (default is the current
+  directory) and fill it with the default Arch 2.0 control files.
+
+  User's never need to edit these files directly!
+
+  Initializing the root directory of a source tree is the first
+  step in importing it.
+
+
+** /`commit' [-r *name*] [*subtree* ...]/
+
+  Commit a revision using either *name* or the default name.
+
+  With *subtree* arguments, only changes in that part of the
+  tree are committed.
+
+
+** /`get' *name*/
+
+  Retrieve the named revision.
+
+
+** /`name' [*new-value*]/
+
+  Each `commit' operation stores a new tree snapshot
+  and assigns that snapshot a symbolic name.
+
+  The `name' command reports (or with an argument sets) the name
+  that will be assigned to the next snapshot taken by `commit'
+  for the tree containing the current directory.
+
+
+** /`manifest'/
+
+  Report the list of files at or below the current directory
+  that are in `revc''s list of files to be considered by the
+  `commit' command.
+
+
+** /`add' *file*/, /`del' *file*/, and /`rename' *from* *to*/
+
+  These commands modify the list of files reported by `manifest'./
+
+  Store a snapshot of the tree in your chosen archive, assigning it
+  the default name.
+
+
+** /`ancestor' *ORIG* *MOD*/
+
+  Given the names of two tree snapshots, report the name of a third
+  tree which is a good choice as an *ANCESTOR* tree for use during
+  three way merges.
+
+** /`ancestry' *name*/
+
+  Report the history of ancestors and merges that have occured
+  to the named tree.
+
+
+** /`prereqs' *names*/
+
+  Report or set the commit prereqs of a tree.
+
+
+* General Properties
+
+  Your archive (the collection of tree snapshots) is stored in a 
+  reasonably space-efficient way as an ordinary tree of files.
+
+  Snapshots are cryptographically verifiable and have
+  handy human-readable fingerprint strings suitable for
+  cyrpotgraphic signing.
+
+  You can safely mirror your archive using programs such as `rsync'.
+
+  Individual snapshots each occupy a separate subdirectory in your
+  archive -- it safe to copy or move these between archives.
+
+  Access to individual files from history is very fast.
+
+  It is safe to delete revisions from your archive.
+
+  It is safe to use the same symbolic name for a revision twice.
+
+  Many convenience commands or operations are needed -- the core
+  commands are "core" because they keep the model simple but
+  I don't claim they are the last word in UI design.
+
+  Many details are omitted from the descriptions above -- for example,
+  how to use `get' to get just a single file or a partial tree;  how
+  to use `commit' to commit changes in just part of a tree.
+
+  Because this is an early release, not all of the functionality of
+  the core commands is present -- just enough to begin attempts at
+  self-hosting.
+
+
+* Copyright
+
+  Copyright /(C)/ 2005 Tom Lord (`lord@emf.net')
+
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the /GNU General Public License/ as published by
+  the Free Software Foundation; either version 2, or (at your option)
+  any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but \\/WITHOUT ANY WARRANTY/\\; without even the implied warranty of
+  \\/MERCHANTABILITY/\\ or \\/FITNESS FOR A PARTICULAR PURPOSE/\\.  See the
+  /GNU General Public License/ for more details.
+
+  You should have received a copy of the /GNU General Public License/
+  along with this software; see the file <"`COPYING'" --
+  $/COPYING.html>.  If not, write to the Free Software Foundation, 675
+  Mass Ave, Cambridge, MA 02139, USA.
+
+  [[null
+   ; arch-tag: Tom Lord Fri Jul  8 11:52:15 2005 (quick-intro.txt)
+  ]]

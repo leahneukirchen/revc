@@ -1,0 +1,9 @@
+
+include $(makefiles)/library-objects.mk
+
+ifeq ($(cgs__install_hackerlab),1)
+include $(makefiles)/install-includes.mk
+endif
+
+# tag: Tom Lord Fri Jan  2 09:53:36 2004 (edit/Makefile.in)
+#

@@ -1,0 +1,137 @@
+# nonl-safe-diff: test for diff and diff3 being safe for no-newline files
+#
+################################################################
+# Copyright (C) 2003 Andreas Fuchs, Tom Lord
+# 
+# See the file "COPYING" for further information about
+# the copyright and warranty status of this work.
+# 
+
+if test $# -eq 0 ; then
+
+  diff_option_name=
+  diff3_option_name=
+  DIFF=diff
+  DIFF3=diff3
+
+elif test $# -eq 2 ; then
+
+  diff_option_name="$1"
+  diff3_option_name="$2"
+  DIFF="`$srcdir/build-tools/scripts/option \"$diff_option_name\"`"
+  DIFF3="`$srcdir/build-tools/scripts/option \"$diff3_option_name\"`"
+
+else
+
+  printf "config script error in %s\n" "$0" 1>&2
+  printf "usage: library-test [diff-option-name diff3-option-name]\n" 1>&2
+  exit 1
+
+fi
+
+
+TMPDIR=",,tmp"
+
+NLEOF_A="$TMPDIR/nl_eof_a"
+NLEOF_B="$TMPDIR/nl_eof_b"
+
+REGULAR_A="$TMPDIR/regular_a"
+REGULAR_B="$TMPDIR/regular_b"
+REGULAR_C="$TMPDIR/regular_c"
+
+## set up files we need
+
+rm -rf "$TMPDIR"
+mkdir "$TMPDIR"
+
+cat >"$NLEOF_A" <<EOF
+bla
+bla
+bla
+blub
+EOF
+
+printf "end" >>"$NLEOF_A"
+
+cat >"$NLEOF_B" <<EOF
+bla
+bla
+bla
+bla
+EOF
+
+printf "end" >>"$NLEOF_B"
+
+cat >"$REGULAR_A" <<EOF
+bla
+bla
+bla
+EOF
+
+cat >"$REGULAR_B" <<EOF
+bla
+bla
+bla
+EOF
+
+cat >"$REGULAR_C" <<EOF
+bla
+bla
+bla
+EOF
+
+
+FAIL=""
+
+if "$DIFF" -u "$NLEOF_A" "$NLEOF_B" 2>/dev/null | grep '^\\' >/dev/null 2>/dev/null; then
+  true
+else
+  FAIL="yes"
+fi
+
+if "$DIFF" -u -L label_a -L label_b "$REGULAR_A" "$REGULAR_B" >/dev/null 2>/dev/null ; then
+  true
+else
+  FAIL="yes"
+fi
+
+if "$DIFF3" -E --merge -L TREE -L ANCESTOR -L MERGE-SOURCE "$REGULAR_A" "$REGULAR_B" "$REGULAR_C" >/dev/null 2>/dev/null ; then
+  true
+else
+  FAIL="yes"
+fi
+
+if test -z "$FAIL" ; then
+  rm -rf "$TMPDIR"
+  exit 0
+fi
+
+rm -rf "$TMPDIR"
+
+printf "\n" 1>&2
+printf "The configured versions of diff and diff3 do not handle files\n" 1>&2
+printf "not ending in newline correctly.\n" 1>&2
+printf "\n" 1>&2
+printf "  configured diff = %s.\n" "$DIFF" 1>&2
+printf "  configured diff3 = %s.\n" "$DIFF3" 1>&2
+printf "\n" 1>&2
+
+if test ! -z "$diff_option_name" ; then
+  printf "\n" 1>&2
+  printf "Use config options\n  --with-%s PROG\n  --with-%s PROG\n" "$diff_option_name" "$diff3_option_name" 1>&2
+  printf "\n" 1>&2
+  printf "  NOTE: especially on BSD-derived systems, you will want\n" 1>&2
+  printf "   to grab a recent version of GNU diff and compile it for use\n" 1>&2
+  printf "   with those config options.   You don't need to replace\n" 1>&2
+  printf "   the native diff tools on your system, but you do need to\n" 1>&2
+  printf "   configure tla specially.   Sorry about that -- some BSDs\n" 1>&2
+  printf "   have made a poor decision about their native diffs.\n" 1>&2
+  printf "\n" 1>&2
+  printf "   (Example systems: some NetBSD, FreeBSD, and MacOS versions.)\n" 1>&2
+  printf "\n" 1>&2
+fi
+
+exit 1
+
+# arch-tag: Tom Lord Sun Dec 14 09:39:08 2003 (auto-conf-lib/nonl-safe-diff)
+#

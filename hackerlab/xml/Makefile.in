@@ -1,0 +1,20 @@
+
+libs			:=	$(objroot)/hackerlab/libboot/libboot.a -lm
+
+generated-source	:=	charsets.c
+
+include $(makefiles)/library-objects.mk
+
+ifeq ($(cgs__install_hackerlab),1)
+include $(makefiles)/install-includes.mk
+endif
+
+$(generated-includes) $(generated-source): ../xml-scaffolding/xml-generate
+	echo
+	echo "================ generating xml character sets ================"
+	echo
+	for f in $(generated-includes) $(generated-source) ; do test ! -e $$f || rm $$f ; done
+	../xml-scaffolding/xml-generate
+
+# tag: Tom Lord Tue Dec  4 14:52:16 2001 (xml/Makefile.in)
+#

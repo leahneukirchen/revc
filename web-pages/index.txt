@@ -1,0 +1,22 @@
+[[title
+        GNU Arch and other software projects
+]]
+
+
+  You are probably here to read about <"/GNU Arch/" --
+  $/arch/index.html>, the free software democratic, distributed, peer
+  to peer revision control system.
+
+  Hopefully you are *especially* interested in the the 
+  <"/GNU Arch 2.0/ project" -- $/revc/index.html>
+
+  Other projects are associated with this site but their
+  web pages are temporarily unavailable.
+
+
+
+[[null
+
+ ; arch-tag: Tom Lord Sun Nov 21 22:42:02 2004 (web/index.txt)
+
+]]

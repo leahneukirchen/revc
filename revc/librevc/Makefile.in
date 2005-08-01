@@ -1,0 +1,11 @@
+
+otherdirs		:=	$(librevc_dirs)
+
+include $(makefiles)/library.mk
+
+ifeq ($(cgs__install_librevc),1)
+include $(makefiles)/install-library.mk
+endif
+
+# arch-tag: Tom Lord Thu Jun 16 18:18:55 2005 (librevc/Makefile.in)
+#

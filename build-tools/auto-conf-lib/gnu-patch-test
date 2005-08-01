@@ -1,0 +1,154 @@
+# gnu-patch-test: test for a version of (GNU) patch that accepts the --posix switch
+#
+################################################################
+## Copyright (C) 2004 Andreas Fuchs
+# 
+# See the file "COPYING" for further information about
+# the copyright and warranty status of this work.
+# 
+
+if test $# -eq 0 ; then
+
+  diff_option_name=
+  diff3_option_name=
+  PATCHPROG=patch
+
+elif test $# -eq 1 ; then
+
+  patch_option_name="$1"
+  PATCHPROG="`$srcdir/build-tools/scripts/option \"$patch_option_name\"`"
+
+else
+
+  printf "config script error in %s\n" "$0" 1>&2
+  printf "usage: library-test [patch-option-name]\n" 1>&2
+  exit 1
+
+fi
+
+CMP='cmp'    # we require a working 'cmp' utility
+TMPDIR="/tmp/,patch-test.$$"
+
+ORIG_A="$TMPDIR/to-patch_a"
+ORIG_PRISTINE_A="$TMPDIR/to-patch_a.the-original"
+PATCHED_A="$TMPDIR/patched_a"
+EXPECTED_A="$TMPDIR/expected_a"
+PATCH_A="$TMPDIR/patch_a"
+
+ORIG_B="$TMPDIR/to-patch_b"
+ORIG_PRISTINE_B="$TMPDIR/to-patch_b.the-original"
+PATCHED_B="$TMPDIR/patched_b"
+EXPECTED_B="$TMPDIR/expected_b"
+PATCH_B="$TMPDIR/patch_b"
+
+## set up files we need
+
+mkdir "$TMPDIR"
+
+for i in "$ORIG_A" "$ORIG_B"; do
+    cat >"$i" <<EOF
+bla
+bla
+bla
+blub
+EOF
+done
+
+cp "$ORIG_A" "$ORIG_PRISTINE_A"
+cp "$ORIG_B" "$ORIG_PRISTINE_B"
+
+
+cat >"$EXPECTED_A" <<EOF
+bla
+bla
+blaubaaa
+blub
+EOF
+
+cp "$ORIG_B" "$EXPECTED_B"
+printf "bla" >>"$EXPECTED_B"
+
+cat >"$PATCH_A" <<EOF
+--- label_a
++++ label_b
+@@ -1,4 +1,4 @@
+ bla
+ bla
+-bla
++blaubaaa
+ blub
+EOF
+
+cat >"$PATCH_B" <<EOF
+--- label_a
++++ label_b
+@@ -2,3 +2,4 @@
+ bla
+ bla
+ blub
++bla
+\ No newline at end of file
+EOF
+
+testresults () {
+    ORIG="$1"
+    PATCHED="$2"
+    EXPECTED="$3"
+    PRISTINE="$4"
+    PATCH="$5"
+
+    if "$PATCHPROG" --forward -f -s --posix -i "$PATCH" -o "$PATCHED" "$ORIG" 2>/dev/null ; then
+	true
+    else
+	FAIL="yes"
+    fi
+    if "$CMP" "$PATCHED" "$EXPECTED" 2>/dev/null >/dev/null ; then
+	true
+    else
+	FAIL="yes"
+    fi
+    if "$CMP" "$ORIG" "$PRISTINE" 2>/dev/null >/dev/null ; then
+	true
+    else
+	FAIL="yes"
+    fi
+}
+
+
+FAIL=""
+if [ -x "`which "$PATCHPROG"  2>/dev/null`" ] ; then
+    
+    testresults "$ORIG_A" "$PATCHED_A" "$EXPECTED_A" "$ORIG_PRISTINE_A" "$PATCH_A"
+    testresults "$ORIG_B" "$PATCHED_B" "$EXPECTED_B" "$ORIG_PRISTINE_B" "$PATCH_B"
+    
+    if [ x"$FAIL" = x ] ; then
+	echo "$PATCHPROG"
+	rm -rf "$TMPDIR"
+	exit 0
+    fi
+fi
+
+rm -rf "$TMPDIR"
+
+printf "\n" 1>&2
+printf "The configured version of patch does not handle the --posix switch\n" 1>&2
+printf "correctly.\n" 1>&2
+printf "\n" 1>&2
+printf "  configured patch = %s.\n" "$PATCHPROG" 1>&2
+printf "\n" 1>&2
+
+if test ! -z "$patch_option_name" ; then
+  printf "\n" 1>&2
+  printf "Use config options\n  --with-%s PROG\n" "$patch_option_name" 1>&2
+  printf "\n" 1>&2
+  printf "  NOTE: You will want to grab a recent version of the GNU patch\n" 1>&2
+  printf "   distribution.  On BSD systems, you can just install the\n" 1>&2
+  printf "   devel/patch port or package.\n" 1>&2
+  printf "\n" 1>&2
+fi
+
+exit 1
+
+
+# arch-tag: Andreas Fuchs Sun Jan 25 02:12:45 2004 (auto-conf-lib/gnu-patch-test)
+#

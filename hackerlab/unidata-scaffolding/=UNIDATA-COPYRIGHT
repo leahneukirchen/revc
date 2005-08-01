@@ -1,0 +1,53 @@
+
+[It's not clear to me that this is really a true copyright, and I
+ don't mean to endorse either the notion that it is, or isn't....
+ but here is why I feel free to include unidata.txt in my
+ distributions. 
+
+ Taken from http://www.unicode.org/Public/UNIDATA/UCD.html
+ on Mon Jul 7 2003.
+
+ Long live the Unicode Consortium!
+
+ -t]
+
+
+
+UCD Terms of Use
+
+Disclaimer
+
+       The Unicode Character Database is provided as is by Unicode,
+       Inc. No claims are made as to fitness for any particular
+       purpose. No warranties of any kind are expressed or
+       implied. The recipient agrees to determine applicability of
+       information provided. If this file has been purchased on
+       magnetic or optical media from Unicode, Inc., the sole remedy
+       for any claim will be exchange of defective media within 90
+       days of receipt.
+
+       This disclaimer is applicable for all other data files
+       accompanying the Unicode Character Database, some of which have
+       been compiled by the Unicode Consortium, and some of which have
+       been supplied by other sources.
+
+Limitations on Rights to Redistribute This Data
+
+       Recipient is granted the right to make copies in any form for
+       internal distribution and to freely use the information
+       supplied in the creation of products supporting the UnicodeTM
+       Standard. The files in the Unicode Character Database can be
+       redistributed to third parties or other organizations (whether
+       for profit or not) as long as this notice and the disclaimer
+       notice are retained. Information can be extracted from these
+       files and used in documentation or programs, as long as there
+       is an accompanying notice indicating the source.
+
+       The file Unihan.txt contains older and inconsistent Terms of
+       Use. That language is overridden by these terms.
+
+
+
+------
+# tag: Tom Lord Mon Jul  7 16:07:02 2003 (unidata-scaffolding/=UNIDATA-COPYRIGHT)
+#

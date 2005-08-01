@@ -1,0 +1,116 @@
+  [[title
+                         GNU Arch 2.0: `revc'
+  ]]
+
+  [[abstract
+     <"/GNU Arch/" -- $/arch/index.html> is a distributed, democratic,
+     changeset-oriented, peer-to-peer revision control system.
+
+     This page is about version 2.0: a new, major update to /Arch/,
+     currently in progress.
+  ]]
+
+
+  [[blockquote
+    */contents/*
+
+    {release information} -- obtaining code
+
+    {todo items} -- todo items and bite-sized tasks
+
+    {documentation} -- doc links
+  ]]
+
+
+* {*release information}
+
+  [[blockquote
+    The third development release of Arch 2.0 is ready
+
+    [[blockquote
+
+        <http://www.seyza.com/releases/revc-0.0x2.tar.gz>
+
+        /SHA1:/ `'
+
+        /Size:/ `'
+    ]]
+
+    This release implements a more scalable, cleaner archive format.
+
+    This release also fixes bugs that have caused people annoyances
+    building on Cygwin.
+
+  ]]
+
+
+
+* {*documentation}
+
+  <"/A Hacker's Guide to Arch 2.0/" -- ./hackers-guide.html> -- some
+  hints about how hit works.
+
+  <"/A Quick Intro to Core Arch 2.0 Commands/" -- ./quick-intro.html>
+  -- a brief description of the core commands.
+
+
+* {*todo items}
+
+** `revc' Highest Priority TODO Items
+
+  The code is very clean but could use a light reorg, a careful
+  review, dealing with all parts marked `dangle' or `debug'.
+
+  The commands need to be implemented: `ancestor', `merged', 
+  `get-merge-trees', `prereqs', `init name', `name'.
+
+  Some convenience commands are needed that capture the ideas of
+  "branching", "tagging", "merge", and "update".
+
+  Better documentation.
+ 
+
+** `revc' "Bite-sized tasks"
+
+  Commands such as `revc-add' do no canonicalize their filename
+  arguments.  Extra slashes, `/.' components and the like can lead to
+  a bogus manifest (fixable by passing the same non-canonical path to
+  `revc-del', btw).  A good canonicalizer is desirable and it should
+  be sprinkled liberally throughout the code.
+
+  
+** `revc' Next Priority TODO Items
+
+  Activate the "blob hint" optimization.
+
+  Implement an inode-based file signature cache.
+
+  Debug the support for partial commits.
+
+  Improve the transactionality of working dirs.
+
+
+
+
+* Copyright
+
+  Copyright /(C)/ 2005 Tom Lord (`lord@emf.net')
+
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the /GNU General Public License/ as published by
+  the Free Software Foundation; either version 2, or (at your option)
+  any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but \\/WITHOUT ANY WARRANTY/\\; without even the implied warranty of
+  \\/MERCHANTABILITY/\\ or \\/FITNESS FOR A PARTICULAR PURPOSE/\\.  See the
+  /GNU General Public License/ for more details.
+
+  You should have received a copy of the /GNU General Public License/
+  along with this software; see the file <"`COPYING'" --
+  $/COPYING.html>.  If not, write to the Free Software Foundation, 675
+  Mass Ave, Cambridge, MA 02139, USA.
+
+  [[null
+   ; arch-tag: Tom Lord Fri Jul  8 11:47:42 2005 (index.txt)
+  ]]

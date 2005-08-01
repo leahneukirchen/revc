@@ -1,0 +1,114 @@
+body 
+{
+ font-family: Verdana, Arial, Helvetica, sans-serif;
+ font-size: 11pt;
+ background-color: #ffffd0;
+}
+
+.navLeft 
+{
+ position: absolute;
+ height: auto;
+ width: 200px;
+ left: 12px;
+ top: 63px;
+ font-size: 8pt;
+}
+
+.mainContent 
+{
+ height: auto;
+ width: 60%;
+ left: 230px;
+ top: 63px;
+ position: absolute;
+}
+
+
+h1.essay-title
+{
+  font-size: 160%;
+  font-style: normal;
+  color: #999999;
+}
+
+
+h1.page-title
+{
+  font-size: 160%;
+  font-weight: normal;
+  font-style: italic;
+  color: #999999;
+}
+
+
+h2
+{
+  font-family: Verdana, Arial, Helvetica, sans-serif;
+  font-size: 130%;
+  font-style: normal;
+  font-weight: bold;
+  margin-left: 6px;
+}
+
+
+h3
+{
+  font-family: Verdana, Arial, Helvetica, sans-serif;
+  font-size: 120%;
+  font-style: normal;
+  font-weight: bold;
+  margin-left: 12px;
+}
+
+
+h4
+{
+  font-family: Verdana, Arial, Helvetica, sans-serif;
+  font-size: 110%;
+  font-style: normal;
+  font-weight: bold;
+  margin-left: 18px;
+}
+
+
+.abstract-title
+{
+  text-align: center;
+  font-family: Verdana, Arial, Helvetica, sans-serif;
+  font-size: 12pt;
+  font-weight: bold;
+}
+
+
+.abstract-body
+{
+  font-family: Verdana, Arial, Helvetica, sans-serif;
+  font-style: italic;
+  margin-left: 10%;
+  margin-right: 10%;
+}
+
+.cartouche
+{
+  padding: 10px 10px 7px 7px;
+  border-style: ridge;
+  border-width: medium;
+  border-color: grey;
+  background-color: #c0c0ff;
+}
+
+pre
+{
+  color: #000040;
+  margin-left: 24px;
+}
+
+code
+{
+}
+
+p
+{
+  margin-left: 24px;
+}

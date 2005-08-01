@@ -1,0 +1,661 @@
+[[title
+                            How Arch Works
+]]
+
+[[abstract
+
+      To understand what a device is good for, it is often helpful to
+      take it apart and examine how it works. Here's an introduction
+      to how Arch does what it does.
+
+]]
+
+
+  This page contains a brief dissection of Arch -- a high-level
+  description of how Arch works. The intention is to give technically
+  savvy readers deeper insight into Arch by helping them to develop
+  some intuitions about how Arch is implemented.
+
+  There are two parts and, depending on your interests, you might want
+  to skip the first. These are:
+
+    {"Performance Principles" -- performance}
+
+    {"A Layered Architecture" -- layers}
+
+
+* Performance Principles
+
+  {*performance}
+
+  Before examining the details of the Arch implementation directly, it
+  will be helpful to name a few performance principles that shape the
+  overall design:
+
+** Minimize Server-side Computation
+
+  Arch allows multiple users to access a single archive over a
+  network. Consequently, although it also supports serverless, local
+  operation, Arch must support a client-server mode of operation.
+
+  We wish Arch to scale in number of concurrent users accessing an
+  archive as far as possible. For example, if a popular project
+  commits an important bug-fix, there may be thousands or tens of
+  thousands of users who want to update their local sources after that
+  commit.
+
+  Consequently, the design of Arch aims to
+
+[[saying
+                // minimize server-side computation //
+
+           // minimize input-output bandwidth requirements //
+]]
+
+The primary strategy for doing so is to
+
+[[saying
+                 // maximize the client-side share //
+                   // of unavoidable computation //
+]]
+
+** Disk Space is Cheap
+
+  Most revision control systems in widespread use today were conceived
+  or designed at least a decade and in some cases two decades
+  ago. Even some contemporary designs follow design patterns that were
+  established that long ago.
+
+  Systems designed with that older perspective place a very high
+  premium on disk space. Although they work hard to be fast,
+  nevertheless they are apt to make trade-offs that consume I/O
+  bandwidth and CPU cycles in favor of consuming disk space. Even
+  worse, these trade-offs often add to the implementation complexity
+  of these systems.
+
+  These days, such trade-offs are already somewhat anachronistic and,
+  within just a few years, such trade-offs will be completely
+  absurd. Multiple gigabyte disks can be had for under $200USD and,
+  before long, we'll have terabyte disks in such price ranges. Storage
+  at those scales is more than ample for revision control purposes.
+
+  The lesson?
+
+[[saying
+
+                    // disk space is very cheap //
+
+                                 ---
+
+    * If the storage costs of an extravagant configuration of Arch
+    * work out to a few 10s of dollars per programmer, per year, our
+    * disk space usage is not excessive.
+
+]]
+
+
+** Bandwidth is Expensive
+
+  Unfortunately, there is for the forseeable future still a sharp
+  constraint about just how much disk space we can touch for a given
+  arch operation: bandwidth remains expensive, especially relative to
+  disk capacity.
+
+  I/O Bandwidth costs are imposed at more than one layer. On-device
+  cache space limits, seek times, transfer times, OS cache space
+  limits, and CPU cache space limits, and main-memory speeds all
+  constrain the utility of passing lots of data back and forth to
+  disk.
+
+
+[[saying
+            // i/o bandwidth is very expensive //
+]]
+
+** Networks are Slow
+
+  A fast, local network connection can easily have lower latency and
+  higher bandwidth than a local disk. Nevertheless, the expected case
+  for most Arch operations over a network is that they pass over the
+  Internet or a comparable network. Minimizing roundtrips and the
+  quantity of data transfered is critical.
+
+[[saying
+
+                           // for Arch: //
+
+    *1) network bandwidth is more expensive than disk bandwidth
+
+    *2) each network roundtrip may as well be a punch in the face
+
+]]
+
+* A Layered Architecture
+
+  And now we turn to the implementation structure of Arch itself. Arch
+  is a layered architecture and it's easiest to understand by starting
+  at the lowest level and working upwards.  
+
+** Tree Inventories
+
+  The lowest level concept in Arch is that of a tree inventory.
+
+  A tree inventory is a listing of all of the files and directories in
+  a tree, with two fields per file or directory. These fields are:
+
+  /1. a physical name -- / the location of a file relative to the root
+   of the source tree. For example: `./src/include/foo.h'
+
+  /2. an inventory id -- / an identifier naming the file. This
+  identifier remains constant even if the physical name of the file
+  changes.
+
+  In other words, if a file is renamed, its physical name changes,
+  but its inventory id remains the same. This allows Arch to recognize
+  that a file has been renamed by comparing two versions of the
+  physical name for a given inventory id. Here is a fragment of a
+  directory listing showing physical names and inventory ids:
+
+[[tty
+
+   physical name:               inventory id:
+
+   links/Makefile.in            i_x9034AKLJn3
+   links/make-links.sh.in       i_lk3n8908nNx
+   links/remove-links.sh.in     i_lk3nn90lkjs
+
+]]
+
+  How are inventory ids associated with files? How does arch know what
+  the inventory id of a given file is? Three mechanisms are provided:
+
+  /1. inventory ids can be stored within a file/ For example, an id
+  can be stored in a comment in a C source file. This mechanism is in
+  some sense the most convenient, but is only suitable for text files,
+  and only for text files that can tolerate such comments.
+
+  /2. inventory ids can be stored in separate files/ The inventory id
+  for a file foo can be stored in `./.arch-ids/foo.id'. Special commands
+  must be used to rename such a file (so that the .id file is renamed
+  at the same time) but this mechanism can be used with any type of
+  file.
+
+  /3. inventory ids can be omitted/ Users can choose to not assign an
+  id to a given file in which case its physical name serves
+  double-duty as its inventory id. Arch can not recognize when such a
+  file is renamed (since the inventory id will change in the process)
+  but for some situtations, this is an acceptable trade-off for the
+  convenience of not having to set-up ids.
+
+** Changesets
+
+  Traditional `diff' is most familiar as a way to show the differences
+  between two versions of a single file. Given a command line option,
+  `diff' can be recursively applied to all of the same-named files
+  within a tree.
+
+  Traditional `patch' is familiar as a way to take the output of
+  `diff', a description of changes made to a file, and apply those
+  changes to some different file.
+
+  The next layer of Arch takes diff and patch one step further by
+  taking advantage of inventory ids. The arch commands mkpatch/dopatch
+  (aka make-changeset/apply-changeset) produce and apply a whole-tree
+  diff-like account of differences, taking into account renames, adds,
+  and deletes. Additionally, these arch commands handle symbolic
+  links, binary files, and file permissions.
+
+  For example, as we'll see below, when you commit a set of changes,
+  that operation records the mkpatch output of your modified tree
+  compared to the unmodified version you "checked out" from an archive.
+
+** Namespace and Archive
+
+  The combination of mkpatch/dopatch and inventory ids allows for a kind
+  of "by hand" approach to revision control in the `diff/patch'
+  style. Programmers could cooperate by exchanging and applying
+  changesets created by mkpatch much as they can cooperate by creating
+  and exchanging patch sets made by `diff'.
+
+  The next layer of arch, the namespace and archive layer, essentially
+  just automates that by hand process. It provides a mechanism for
+  naming (with globally unique, human-readable names) the changesets
+  programmers create, and a mechanism for publishing changesets and
+  retrieving published changesets.
+
+** Global Revision Names
+
+  The arch namespace is organized around the concept of a development
+  line -- a sequence of revisions ordinarilly beginning with a
+  complete tree called a *base revision* and proceding with a number
+  of successive *changeset revisions*, each defined relative to its
+  predecessort by a changeset.
+
+  For example, a programmer might initially import the source for an
+  implementation of tar creating a base revision named:
+
+[[tty
+	tar--mainline--1.0--base-0
+]]
+
+  After fixing a bug, the programmer can commit the changeset
+  describing the bugfix. The changeset and the tree resulting from
+  applying it are known as:
+
+[[tty
+	tar--mainline--1.0--patch-1
+]]
+
+  Additional work and more commits would yield:
+
+[[tty
+	tar--mainline--1.0--patch-1
+	tar--mainline--1.0--patch-2
+	tar--mainline--1.0--patch-3
+        ... etc.
+]]
+
+  This development line is situated within a particular arch archive
+  which itself has a name. Prefixing the archive name to a revision
+  name yields a globally unique name for the revision:
+
+[[tty
+	lord@emf.net--gnu-archive-2004/tar--mainline--1.0--patch-3
+]]
+
+  Tags are named in the same way and function comparably to base
+  revisions. For example, instead of importing a new source tree to
+  create
+
+[[tty
+	tar--mainline--1.0--base-0
+]]
+
+  the programmer might have defined that revision to be a tag revision
+  -- more or less an an alias within the namespace. We often use
+  notation like:
+
+[[tty
+	tar--mainline--1.0--base-0 => tar--experimental--1.0--patch-4
+]]
+
+  to mean "the base-0 revision in the mainline branch of tar is a tag
+  revision, tagging the patch-4 revision in the experimental branch". 
+
+** Archive Storage
+
+  The most basic role of an arch archive, therefore, is to store base
+  revisions, commit revisions, and tag revisions in a way that (1)
+  associates them with their name; (2) allows programmers to query and
+  retrieve revisions and the changesets and other data associated with
+  them.
+
+  Internally to arch, the storage mechanism is isolated from the rest of
+  the implementation by an abstraction barrier. Entirely new storage
+  managers are easy to install.
+
+  In practice, only a very simple storage manager is used and experience
+  has shown this stone-simple approach to work well. In particular,
+  archives are stored as ordinary files: imported base revisions are
+  stored as a compressed tar file of the entire source tree; changeset
+  revisions created by commit are stored as a compressed tar file
+  containing just the changeset; tag revisions are stored as a small
+  text file containing the name of the tagged revision.
+
+  The stone-simple approach has some enourmous advantages and is one are
+  where the performance principles enumerated above come into play. Some
+  example advantages:
+
+  /A server is merely a generic file server/ The only capability
+  needed for an arch server is the ability to create new files and
+  directories and retrieve existing ones. Consequently, an unmodified
+  FTP, SFTP, or WebDAV server is, already, an arch archive
+  server. Nearly no computation takes place server-side and a given
+  server can easily support very large numbers of concurrent
+  connections.
+
+  /Network traffic is minimized/ Imports and commits ship to the
+  server compressed tar files of just the essential data of the
+  transition. Subsequent retrievals simply read that data back. As a
+  result, basic operations require few round-trips and minimal
+  bandwidth.
+
+  /Replication is easy/ New files are added to archives with every
+  commit, tag, or import transaction, but old files are never removed
+  or modified. Consequently, it is trivial to replicate and
+  incrementally update read-only mirrors of any archive. Arch has a
+  built-in facility for this and programs such as rsync can be
+  configured to do the job more efficiently.
+
+** Archive Caching, Revision Libraries and Other Speedups
+
+  The archive storage layer has many advantages but it also creates a
+  performance problem that needs to be solved:
+
+*** Simple Archive Formats Can be Slow
+
+  Consider how, given just the archive storage mechanism described
+  above, a particular revision can be retrieved. Let's suppose that we
+  want to get a copy of the tree for:
+
+[[tty
+	tar--mainline--1.0--patch-4
+]]    
+
+
+  Absent any other mechanism, we would build that tree with the following steps:
+
+  /1. retrieve the base revision -- / fetch the compressed tar file of
+  the `base-0' revision from an archive and unpack it.
+
+  /2. retrieve and apply the first changeset -- / fetch the compressed
+  tar file of the changeset for `patch-1', unpack it, and apply the
+  changeset to the `base-0' tree. Now we have a `patch-1' tree. 
+
+  /3. retrieve and apply successive changesets -- / continue applying
+  changesets until we lllreach the desired revision (`patch-4').
+
+  That's conceptually simple, and it's a direct consequence of our
+  choice of "dumb server" storage management, but it is
+  problematic. For example, suppose that instead of wanting the
+  `patch-4' revision we wanted the `patch-140' revision. Instead of having
+  to apply four changesets to the base revision, we'd have to apply
+  140 -- which would be prohibitively expensive.
+
+  Worse, in the case of wanting the `patch-140' revision, we may find
+  ourselves violating some of our performance principles. After all,
+  even compressed, those 140 changesets that we'll fetch from the
+  server may turn out to be larger than just a complete copy of the
+  `patch-140' tree would be. By not having the server compute that
+  complete tree, we may be trading network costs for server costs.
+
+  Arch solves these problems with three mechanisms: archive *cached
+  revisions*, *archive mirrors*, and *client-side revision libraries*.
+
+*** Archive Cached Revisions
+
+  One way to reduce the amount of changeset application and network
+  bandwidth associated with building a revision is to apply our
+  performance principle that disk space is very cheap.
+
+  Specifically, we augment the archive format to permit
+  (user-directed) caching of pre-built revisions, stored as compressed
+  tar files. Continuing the earlier example, a user may have asked
+  that the revision `patch-130' be cached. That means that in addition
+  to containing a compressed tar file of the changeset that describes
+  how `patch-130' differs from `patch-129' the archive will contain a
+  compressed tar-file of a pre-built copy of `patch-130'.
+
+  Now, if a user asks for a copy of the `patch-140' tree, rather than
+  starting at `base-0' then fetching and applying 140 changesets, arch
+  will fetch the full-tree copy of `patch-130' then fetch and apply only
+  10 changesets to produce a `patch-140' tree.
+
+  In keeping with our goals of client-side computation and dumb
+  servers, when an archive cached revision is created it is
+  constructed on some client, bundled as a tar file, and stored on the
+  server.
+
+  Which revisions should be archive cached? One rational,
+  approximately time-and-bandwidth optimal policy would be to space
+  cached revisions such that the sum of the sizes of changesets
+  between any two cached revisions is about the same as the size as
+  the tar file containing the cached revision. Spacing them further
+  apart would lead to a situation where sometimes the total size of
+  changesets fetched to build a revision exceeds what could have been
+  fetched with denser caching. Spacing them closer together will cause
+  arch to sometimes fetch a cached revision when it would have been
+  faster to fetch several changesets instead. Note that applying this
+  policy approximately doubles the size of an archive -- which is
+  quite accessible since archives are relatively compact to begin with
+  and, after all, disk space is very cheap.
+
+  Other caching policies make good sense in some situations,
+  though. Therefore, we leave it to users to explicitly cache
+  revisions -- a process that can trivially be automated to implement
+  whatever policy a user chooses.
+
+*** Archive Mirrors
+
+  A second technique for saving on network costs is to use archive
+  mirrors. Arch contains a facility for constructing and incrementally
+  updating local, read-only copies of remote archives. When such a
+  mirror is used, each changeset or base revision from the remote
+  archive is fetched exactly once and, thereafter, access to it is
+  entirely local. In our example, this would still (by default) mean
+  applying 140 changesets -- but at least those changesets would
+  reside on a local disk.
+
+  Archive caching and archive mirroring interact in a favorable
+  way. Although mirrors are generally read-only, users may
+  archive-cache a revision in a mirror. For example, one reasonable
+  set-up is to publish a heavily read archive on the Internet, but
+  archive-cache nothing there. Instead, encourage users to mirror from
+  that public archive rather than use it directly, and to
+  archive-cache according to their needs in their local copies.
+
+*** Revision Libraries
+
+  The final technique for speeding up arch operations is entirely a
+  client-side optimization. As with archive mirrors and archive
+  caching, it trades-off disk space for speed.
+
+  The technique provides for something called a revisision library. A
+  revision library is a read-only collection of pre-built whole-tree
+  copies of revisions, stored more or less as ordinary trees.
+
+  A special feature of revision libraries is that unmodified files are
+  shared between revisions via hard-links. For example, suppose that a
+  revision library contains `patch-139' and we wish to add `patch-140' to
+  the library. The addition happens in two steps: First, a hard-linked
+  copy of `patch-139' is created. All of the files in this copy are
+  shared with the original `patch-139' -- they are the hard-links to the
+  two files. Second, the changeset defining `patch-140' is applied to
+  the hard-linked copy. The changeset application process "breaks
+  hard-links" for files it modifies. Thus, the end result is a
+  `patch-140' tree in which files that are unmodified since `patch-139'
+  are shared with the `patch-139' tree via hard-links, and modified
+  files are private to the `patch-140' tree.
+
+  This is a reasonably space-efficient way to store many, many
+  revisions in space which is a fraction of the sum of their
+  individual sizes.
+
+  The revision library mechanism is designed to be configurable as a
+  cache or memo. Revisions can be automatically added to a library, on
+  demand, or they can be explicitly added. It is a trivial matter for
+  users to implement a "pruning" policy to discard revisions that are
+  no longer needed.
+
+  When a revision library is present, many arch operations become
+  very, very fast. For example, suppose again that we want a `patch-140'
+  tree and that initially the revision library contains
+  `patch-139'. Arch (suitably configured) will proceed by adding
+  `patch-140' to the library (by creating a hard-linked copy of 139 and
+  applying one changeset to it) and then recursively copying the
+  resulting tree from the library to the user's work area. If the
+  library already contains `patch-140', then only the recursive copy is
+  necessary.
+
+  Often the tools that a user uses to work on their checked-out trees
+  are well-behaved with respect to hard-links. Emacs and vi, for
+  example, do not modify the files you edit --- they write fresh
+  copies of those files containing your modifications and thus they
+  break hard-links to those files.
+
+  Arch can take advantage of the hard-link-safety of common
+  tools. When checking-out a tree, you can ask arch to not recursively
+  copy the tree form a revision library but, instead, to make your
+  working copy by hard-linking to the revision library. This turns out
+  to be a blindingly fast way to check out a tree. (And, arch contains
+  integrity checking features for revision libraries. Should your
+  tools fail to be hard-link-safe after all, arch will notice and
+  protect you from any resulting revision library corruption.)
+
+*** Speedups Summarized
+
+  The basic archive storage model of arch is simple, space-efficient,
+  and often but not always network- and time-efficient. In some cases,
+  however, without additional mechanisms, it would lead to gross
+  network- and time-inefficiencies.
+
+  We eliminate those gross inefficiences with three mechanisms,
+  archive caching, archive mirroring, and revision libraries, which
+  have in common that that they trade disk-space and client-side
+  computation for better performance overall. A pleasant property of
+  this approach is that it requires _no_ server-side computation and
+  thus, excellent speeds can be achieved without sacrificing the
+  scalability or arch in the slightest.
+
+** Patch Logs and Merging
+
+  We've seen so far how arch allows users to commit import, changeset,
+  and tag revisions. We've seen that these are assigned globally
+  unique names and examined how they are stored in archives. We've
+  seen how revisions are retrieved from archives and looked at some of
+  the speed-up mechanisms that exist to make retrieval fast.
+
+  Now we turn to the question of merging. Suppose, for example, that
+  two users are each working on their own development line of a single
+  project. Naturally, they may want to share work: each user will want
+  to combine his changes with changes made by the other. How does arch
+  handle this?
+
+  To understand the answer, we must first understand patch logs and
+  then we can turn to history sensitive merging.
+
+*** Patch Logs
+
+  Whenever a user creates any new revision he must provide a short
+  description of the revision. The description, formatted similarly to
+  an email message, contains a header that provides a brief summary of
+  the revision, and a body that can contain details.
+
+  Arch maintains a special directory, called `{arch}' in the top level
+  of each project tree. This directory contains the patch log entries
+  that pertain to the tree.
+
+  For example, when a tree is first imported, the user writes a patch
+  log entry and that is stored in a file under `{arch}', indexed by the
+  name of the revision created by the import. The tar bundle
+  containing the imported tree contains that patch log file.
+
+  Similarly, when a user commits or tags a revision, the patch log
+  entry for that new revision is treated like a newly added file -- it
+  appears in the associated changeset.
+
+  This implies, for one thing, that a given revision contains patch
+  log files for its ancestors in its development line. The tree for
+  `patch-140' contains patch log files for `base-0', `patch-1',
+  .... through `patch-140' itself.
+
+  When patch log files are added to a revision, arch adds additional,
+  automatically computed headers. For example, one header names all
+  newly added files in the revision. Another header reports what files
+  have been deleted.
+
+  Conveniently, patch log files can be processed and summarized to
+  produce a conventional ChangeLog file. In fact, arch has facilities
+  to do so automatically.
+
+
+*** History Sensitive Merging
+
+  Consider, then, what happens if a user wants to add to his tree the
+  changes assocated with a revision made in a different development
+  line. For example, suppose that I have checked out a copy of
+
+[[tty
+	tar--mainline--1.0--patch-140
+]]
+
+  and I note that a revision in a different branch, namely
+
+[[tty
+	tar--bugfixes--1.0--patch-2
+]]
+
+  is a changeset revision and that the changes it makes fix a bug I'd
+  like fixed in mainline.
+
+  Arch can accomplish this quite easily simply by fetching the
+  changeset for the bugfix and applying it to my patch-140 tree. That
+  changeset treats the patch log entry for the bugfix revision as a
+  newly added file. Therefore, after applying the changeset, my (now
+  modified) tree for
+
+[[tty
+	tar--mainline--1.0--patch-140
+]]
+
+  will contain a patch log entry for
+
+[[tty
+	tar--bugfixes--1.0--patch-2
+]]
+
+  That's handy in and of itself. For example, if I don't remember
+  whether the bug-fix changes have been applied to my tree, I can use
+  arch to query the patch log files and look for a record of it having
+  been applied.
+
+  It's also handy for smart merging. For example, in my mainline tree, I can ask arch:
+
+[[tty
+	% tla whats-missing tla--bugfixes--1.0
+]]
+
+and it will respond with something like:
+
+[[tty
+	patch-1
+        patch-3
+        patch-4
+]]
+
+  indicating that I have not applied bugfix patches 1, 3, and 4 -- but
+  have applied bugfix patch 2.
+
+  Using the summary lines from log messages, arch can report:
+
+[[tty
+	% tla --summary whats-missing tla--bugfixes--1.0
+	patch-1
+        	fix the help message
+        patch-3
+		fix buffer overflow (bug #238)
+        patch-4
+		correct exit status  (bug #14)
+]]
+
+  and a command such as:
+
+[[tty
+	% tla whats-missing tla--bugfixes--1.0 | tla replay --list -
+]]
+
+  will apply just the missing patches but none that I've already applied.
+
+  Merging isn't limited to just the changesets created by
+  commit. Indeed, arch can compute the differences between any two
+  revisions and apply those to my tree as a form of
+  merging. Intelligently deciding which two revisions to compare is a
+  tricky problem with no one solution -- arch provides a variety of
+  solutions, most of which examine patch-logs to help with the
+  decision process. This general mechanism is the basis for specific
+  history-sensitive merge commands such as star-merge.
+
+** And the Rest is Easy
+
+  The above summarizes the essense of what could be dubbed core
+  arch. Although many details have been omitted or glossed over,
+  hopefully you now have some intuition about how arch works.
+
+  Many commands are built on top of the basic facilities outlined
+  above. In all cases, they boil down to simple combinations of the
+  above ideas: changeset computation and application, building
+  revisions based on archive and revision library data, and so forth.
+
+[[null
+  ; arch-tag: Tom Lord Mon Nov 22 10:51:42 2004 (writings/how-arch-works.txt)
+]]

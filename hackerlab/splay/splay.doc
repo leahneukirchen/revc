@@ -1,0 +1,26 @@
+/* splay.doc:
+ *
+ ****************************************************************
+ * Copyright (C) 2004 Tom Lord
+ * 
+ * See the file "COPYING" for further information about
+ * the copyright and warranty status of this work.
+ */
+
+
+/************************************************************************
+ *(h0 "Splay Trees")
+ * 
+ * Splay trees are self-balancing binary trees that adjust their
+ * structure in response to access patterns.
+ * 
+ * See url:"http://www.link.cs.cmu.edu/splay/" for links to more
+ * information.
+ */
+
+/*(include-documentation "fsplay.c")
+ */
+
+
+/* tag: Tom Lord Sun Jan  4 10:26:33 2004 (splay.doc)
+ */

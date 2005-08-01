@@ -1,0 +1,7 @@
+
+include $(makefiles)/dirs.mk
+
+
+# arch-tag: Tom Lord Wed Oct  6 17:41:34 2004 (awiki/Makefile.in)
+#
+

@@ -1,0 +1,358 @@
+  [[title
+                     A Hacker's Guide to Arch 2.0
+  ]]
+
+  /note:/ this description presumes deep familiarity with revision
+  control and a fairly good understanding of Arch and git.
+
+* In Brief
+
+  Each `commit' (including "imports") creates a new revision record.
+  The revision record contains all files newly modified in that
+  commit, along with some metadata.  ("Newly modified", in this
+  case, does *not* necessarily mean files which are different from
+  the immediate ancestor.   Instead, it means files which are 
+  different from any in the *prerequisit changesets* (see below).)
+
+  Revision records are independent entities: any archive can 
+  contain copies of any revision records.
+
+  `get' consists of building a working dir, reading the most recently
+  modified files from the revision record itself, reading the other
+  files from "prerequisit commit records".
+
+
+* Namespace
+
+  A *revision name* is a nearly arbitrary user-selected name
+  for a revision.
+
+  A *half-qualified revision name* is a revision name plus
+  an SHA1 checksum summarizing the contents of the tree and
+  its list of ancestors.
+
+  A *fully-qualified revision name* is a half-qualified 
+  revision name plus an SHA1 checksum summarizing the contents
+  of a specific commit record --- the specific bytes written
+  by a particular call to `commit'.
+
+  It's good to understand what these names refer to:
+
+  [[blockquote
+
+    /revision name/ -- what user's like to call this tree.
+
+    /half-qualified revision name/ -- a checksum-based description
+    of the *contents* of the tree.   Different trees with the same
+    half-qualified name are hard to create accidentally but, if
+    SHA1 is cracked to the degree MD5 is, colliding half-qualified
+    names will not be a surprise.
+
+
+    /fully-qualified revision name/ -- a checksum-based description
+    of a specific set of bytes created by `commit'.   Identical 
+    revisions (in terms of tree content) can be created more than 
+    one way using `commit' -- each will have a different
+    fully-qualified name.   It is believed to be "sufficiently"
+    difficult to create two well-formed commit records that 
+    collisions (accidental or otherwise) are a long ways off (though,
+    again, some expert analysis to confirm my intuition about that
+    is desirable).
+
+  ]]
+
+
+
+* Revision Format
+
+  Each revision is stored on disk as a tree.   Most of
+  the tree is a "blob database" in the style of git:
+  files whose names are derived from a checksum of their
+  contents -- you retrieve a file by asking for the file
+  having a given checksum.  Some of the files in this database
+  are literal copies of files from the tree.  Other files
+  in the database describe directories in the tree using a
+  portable format.
+
+  A revision tree also contains *ancestry* and *prereqs* files
+  for the tree.  (See {Special Files}, below).
+
+  A revision tree also contains a text file, `ticket', which
+  gives the checksum of the root directory of the tree, the
+  name of the revision, the metadata (permissions, etc) for
+  the root of the tree, and a checksum for the tree's ancestry.
+  Any two revisions with identical contents and ancestry 
+  should have identical `ticket' files.
+
+  [[blockquote
+    */sample ticket:/*
+
+    [[tty
+      revision: hackerlib.7
+      root-blob: 25e74c4fb4eb12dbe77aee0cb9702780cbc2e496.7168
+      root-metadata: d---rwxrwxr-x.500.500
+      ancestry-blob: 42af15594b1e1354ef75a7fc17b0610ecd950de7.504
+    ]]
+  ]]
+
+  Finally, a revision tree contains a text file, `commit-ticket',
+  which adds a checksum for the `ticket', a checksum for the `prereqs'
+  file, the total number of files in the blob database, the total
+  inflated size of those files, the total deflated size of those
+  files, and an additional checksum which (roughly speaking)
+  summarizes a fixed format listing of the files in the blob database
+  and their sizes:
+
+  [[blockquote
+    */sample commit ticket:/*
+
+    [[tty
+      ticket-blob: 05921e0ae2938ed33ecd4b20aabd7f95f8755f4f.177
+      revision: hackerlib.7
+      root-blob: 25e74c4fb4eb12dbe77aee0cb9702780cbc2e496.7168
+      root-metadata: d---rwxrwxr-x.500.500
+      ancestry-blob: 42af15594b1e1354ef75a7fc17b0610ecd950de7.504
+      ignored-blob: e5a62f693dbcee47764061726063b9285c9a87c1.9
+      prereqs-blob: 88f62e3ae6aa0bba21685498d3b0e9e75f80c23f.3170
+      n-blobs: 6
+      total-file-size: 22732
+      total-zip-size: 4669
+      blob-contents-blob: 80364ad68a71d0c7273f350de0d0526f4dca0b05.275
+    ]]
+ ]]
+
+
+ /Note:/ It is believed (further analysis is desirable) to be highly
+ improbable that a malicious attacker will ever be able to forge a
+ (valid in every respect) revision whose commit ticket matches (byte
+ for byte) the commit ticket of some other release.  Simple counting
+ arguments prove that such forgeries are certainly possible so 
+ one can't be certain but, at least, the commit ticket is the root
+ of a very tangled mess of multiple checksums, file-length assertions
+ and so on, making it far harder to break than simply "cracking SHA1".
+
+
+
+* {*Special Files}
+
+  At the top of each working directory is a subdir named `.revc'.
+  It containts control files used by `revc'.
+
+  Note that `.revc' is not considered "part of the tree" the
+  same way that `{arch}' is under 1.x.
+
+
+
+** Manifest and Ignore Lists (`.revc/manifest', `.revc/ignore')
+
+  Arch 2.0 only cares about *some* of the files in your tree: those
+  listed in `.revc/manifest' (a 0-separated list of file names).
+
+  A similar list is `.revc/ignore' -- these are files which are 
+  explicitly *not* part of your tree.   `revc-lint' and `revc-new'
+  are the primary commands that care about the ignored files list.
+  
+  The `manifest', `add', `del', `ign', `lint', `lsr', `missing',
+  `new', `rename', and `unign' commands manage the manifest list.
+
+
+
+** Ancestry (`.revc/ancestry')
+
+  The ancestry file is used for merging purposes.
+
+  Ancestry in revc is a two level list.   All entries in the list
+  are *half-qualified revision names*.  The upper level of the 
+  list is the direct lineage of the tree.   The second level of
+  the list are trees "merged in".   A pair of decimal numbers
+  is used to describe the structure of the two-level list:
+
+  [[tty
+        2.0 revc-0.1.1/+<SHA1>      # 2nd revision since import
+        2.1 revc-0.1.0be/+<SHA1>    # merged in big-endian support
+        2.2 revc-0.1.0joe/+<SHA1>   # merged from joe
+        1.0 revc-0.1.0/+<SHA1>      # call this the first "import"
+        0.0 nil/+<SHA1>             # the universal ancestor
+  ]]
+
+  The direct ancestry there is:
+
+  [[tty
+        revc-0.1.1  revc-0.1.0  nil
+  ]]
+
+  and, as noted, revc-0.1.1 merged in from two other trees.
+
+  Whenever you `commit', the generated commit record contains the 
+  complete ancestry of the newly created tree.  On disk and for
+  transport, the list is compressed (and, as you can see, should
+  compress well in excess of the usual 50% rule of thumb).
+
+  Uncompressed, these lists are still of reasonable size even if
+  they contain 10s of thousands of entries.  It is not clear that
+  their growth rate will *ever* require "history pruning" but,
+  if so, at least that point in time is quite a ways off.  A list
+  with 100K entries would, today, not be unreasonable to store in
+  memory (even perhaps iterating over it and indexing it) in most
+  environments.  (By contrast, 10K patch-log entries in 1.x is 
+  already a pretty uncomfortable amount.)
+
+
+
+** Prereqs (`.revc/prereqs')
+
+  The prereqs list is a list of fully-qualified revision names (see
+  above) -- a list of earlier commit records.
+
+  When `commit' creates a new record, each file and directory
+  in the tree is compared to all of the files and directories
+  in the earlier commit records.   If an identical file is found,
+  `commit' skips the file --- if none is found, the file is 
+  stored in the new commit record.
+
+  Thus, `revc' does a kind of "whole-tree delta compression"
+  (but does not, at least as it stands now, to sub-file delta
+  compression).   By modifying the prereqs list, systems and 
+  users can tune this delta-compression along a continuum.
+  With only the universal "nil revision" as a prereq, `commit'
+  performs an `import' or `archive-cache-revision' type of
+  operation.
+
+
+
+* Changesets: Blob-trees, Tickets, Prereqs, and Ancestry
+
+  `commit' creates a changeset.
+
+  By default, a changeset is represented on-disk as a directory.
+
+  The directory contains a shallow tree of "content-addressable
+  files": each file is stored in the tree under a name derived from
+  the SHA1 checksum of the file contents.   (The current code does not
+  handle the case of two distinct files with the same SHA1 and size
+  but modifications necessary to handle this case are not hard.)
+
+  Some of the content-addressable files in a changeset are compressed
+  full-text images of files from the tree being committed.   Other
+  content-addressable files in a changeset are compressed binary
+  "virtual images" of directories from the tree being committed.
+
+  A committed file is stored simply as a zipped copy of the file
+  contents.
+
+  A committed directory is stored as a zipped copy of a binary file.
+  The binary file has 1 record for each entry in the directory.  Every
+  record is 512 bytes long.   The format of each record is:
+
+  [[tty
+     Directory Record:
+
+     [... name (256 bytes) ...][... metadata ... ][... contents-address ...]
+  ]]
+
+  `commit' stores exactly (all and only) those file contents and
+  directories which are not identical to some content-addressable file
+  stored in a *prerequisit commit*.   A user who has the changeset
+  created by *this* commit, plus the changesets created by all of the
+  prerequisit commits, can reconstruct the entire tree.
+
+  The *ticket* in a changeset records the contents-address of the root
+  directory of the tree, metadata for that directory, and the name
+  of the new revision, and the ancestry of the tree being committed.
+
+  The *commit ticket* records everything in the *ticket*, but also
+  records the list of prerequisit tickets.
+
+  The net effect is that changesets form two graphs, both of which
+  are acyclic, directed graphs.
+
+  /The Prereq Graph:/  Every changeset points to older changesets
+  which are prereqs.  Access to the prereq changesets are necessary to
+  be able to extract the tree from the changeset.
+
+  /The Ancestry Graph:/ Every changeset lists a set of ancestors.
+  Ancestors are *not* earlier changesets.   Instead, ancestors are 
+  listed as symbolic revision names combined with the contents-address
+  of the root directory of the ancestor.
+
+  The ancestry graph is used for smart merging -- it is used to pick
+  the "common ancestor" of any two trees.
+
+  The prereq graph is used for extracting revisions from archives --
+  it is used to find files unmodified from some other revision.
+
+  There is no *necessary* connection between the two graphs.  Two
+  distinct commits can be the same point on the ancestry graph (define
+  exactly the same tree with the same name and ancestry) yet be at
+  very different points on the prereq graph.   (For `tla1.x' hackers,
+  this is a really nifty (imho) generalization of both of the ideas
+  "archive cached revisions" and "skip deltas".)
+
+
+* Archive Format
+
+  The archive format is designed to be suitable for use as a 
+  typical FTP site in which, aside from commit records, people
+  might store things like tar bundles of releases, README files
+  and the like.
+
+  The layout relies on a heuristic that, given a revision name,
+  guesses a good "category" for that revision name.   The category
+  is a prefix of the revision name:
+
+  [[tty
+        revision:			category:
+
+        linux-0.1			linux
+        arch-tools--devo--0.1		arch-tools
+        5.0				MISC
+  ]]
+
+  An archive is layed out using categories as a top level:
+
+  [[tty
+	ARCHIVE/
+          linux/
+            linux-0.1/
+              ...
+            linux-0.2/ 
+              ...
+            linux-0.3/
+              .<SHA1>+<SHA1>/
+                ticket
+                commit-ticket
+                ancestors
+                prereqs
+                <blobs...>
+              # linux-0.3.tar.gz could go here
+  ]]
+
+  Note that the commit record is stored as a "dot file" (normally
+  invisible) named after the fully-qualified name of the commit.
+  An archive can have multiple commit records for the same name and
+  they may or may not have the same tree contents.
+
+
+
+* Copyright
+
+  Copyright /(C)/ 2005 Tom Lord (`lord@emf.net')
+
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the /GNU General Public License/ as published by
+  the Free Software Foundation; either version 2, or (at your option)
+  any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but \\/WITHOUT ANY WARRANTY/\\; without even the implied warranty of
+  \\/MERCHANTABILITY/\\ or \\/FITNESS FOR A PARTICULAR PURPOSE/\\.  See the
+  /GNU General Public License/ for more details.
+
+  You should have received a copy of the /GNU General Public License/
+  along with this software; see the file <"`COPYING'" --
+  $/COPYING.html>.  If not, write to the Free Software Foundation, 675
+  Mass Ave, Cambridge, MA 02139, USA.
+
+  [[null
+   ; arch-tag: Tom Lord Fri Jul  8 11:52:34 2005 (hackers-guide.txt)
+  ]]

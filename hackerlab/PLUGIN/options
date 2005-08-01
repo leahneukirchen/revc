@@ -1,0 +1,3 @@
+binary		install-hackerlab       no
+	If true, libhackerlab will be installed.
+

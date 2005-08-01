@@ -1,0 +1,12 @@
+libs			:=	../libawiki/libawiki.a \
+				$(objroot)/hackerlab/libhackerlab/libhackerlab.a \
+				-lm
+
+mains			:=	awiki.c
+
+include $(makefiles)/programs.mk
+# include $(makefiles)/install-programs.mk
+
+
+# arch-tag: Tom Lord Sun Oct 31 09:50:00 2004 (awiki/Makefile.in)
+#

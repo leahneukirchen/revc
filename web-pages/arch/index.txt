@@ -1,0 +1,133 @@
+  [[title
+                 The GNU Arch Revision Control System
+  ]]
+
+  [[abstract
+     /GNU Arch/ is a distributed, democratic, changeset-oriented,
+     peer-to-peer revision control system.  /GNU Arch/ is 
+     <"/free software/" -- http://www.gnu.org>.
+
+     Started in 2001, the GNU Arch project is a leader and a
+     contributor in the efforts of free software and open source
+     hackers to develop revolutionary tools to advance
+     their efforts.
+
+     This page is a collection of more or less stable links about
+     /Arch/.
+  ]]
+
+* Quick Links:
+
+  <ftp://ftp.gnu.org/pub/gnu/gnu-arch> -- the primary distribution
+  site for GNU Arch.
+
+  <http://lists.gnu.org/mailman/listinfo/gnu-arch-users> -- the
+  `gnu-arch-users' mailing list.
+
+  <http://lists.seyza.com/cgi-bin/mailman/listinfo/gnu-arch-dev> --
+  the `gnu-arch-dev' mailling list.
+
+  <http://wiki.gnuarch.org> -- the Arch Wiki, maintained by users.
+
+
+* Orientation
+
+  There are quite a few branches of Arch and different places to get
+  different distributions.  Of greatest interest to most users are
+  these three (the links provide further information about each
+  version, including download links and the like):
+
+  [[blockquote
+
+    /{GNU Arch 1.x}/ also known as /`tla'/.  This version is released
+    via the /GNU/ project.  It is relatively *stable workhorse*
+    meaning that major new features are not being added and it can
+    take a while between releases for minor bugs to be fix.
+
+    /{Canonical Corp's Bazaar}/ also known as /`baz'/ is a branch of
+    /tla/.  Releases are made frequently with an emphasis on user
+    interface changes and performance tweaks.
+
+    /{GNU Arch 2.0}/ also known as /`revc'/.   This version
+    is released by the GNU Arch maintainer and is an entirely
+    new source base -- not a branch.   /revc/ radically 
+    simplifies Arch while simultaneously generalizing it, 
+    all with less and simpler code.
+
+  ]]
+
+
+
+* Reference and Historic Pages
+
+  At various times over the years I've put up pages explaining this
+  or that about Arch.   Over time, these tend to become slightly
+  outdated -- Arch evolves a little out from under them, or 
+  errors are discovered in the pages, or better ways are found to
+  say the same thing.   Nevertheless, people still seem to find them
+  useful and squawk a bit when they are taken down so here is a 
+  list of favorites.
+
+  /Note:/ These pages describe /GNU Arch 1.x/ -- they are not
+  very useful for learning about <"/GNU Arch 2.0/" --
+  $/revc/index.html>.
+
+  [[blockquote
+
+    <"An Overview of GNU Arch" -- ./arch-overview.html>
+
+    <"How Arch Works" -- ./how-arch-works.html>
+
+    <"What is Revision Control?" -- ./what-is-revctl.html>
+
+  ]]
+
+
+
+* Branch Info
+
+** {*GNU Arch 2.0}
+
+  GNU Arch 2.0 (/`revc'/)is a thorough rewrite of Arch, combining the
+  best concepts from the `tla' branches (GNU Arch 1.x and Bazaar) with
+  great ideas from systems such as /baz-ng/, /git/, and /monotone/.
+
+  More detailed News about Arch 2.0 is available <"on this site" --
+  $/revc/index.html>.
+
+
+** {*GNU Arch 1.x}
+
+  This release can be downloaded from 'ftp.gnu.org/pub/gnu-arch' and
+  other GNU mirrors.   The most recent release is `tla-1.3.3'.
+
+
+** {*Canonical Corp's Bazaar}
+
+  The main portal for this version of Arch
+  is <http://bazaar.canonical.com/>.
+
+
+
+* Copyright
+
+  Copyright /(C)/ 2005 Tom Lord (`lord@emf.net')
+
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the /GNU General Public License/ as published by
+  the Free Software Foundation; either version 2, or (at your option)
+  any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but \\/WITHOUT ANY WARRANTY/\\; without even the implied warranty of
+  \\/MERCHANTABILITY/\\ or \\/FITNESS FOR A PARTICULAR PURPOSE/\\.  See the
+  /GNU General Public License/ for more details.
+
+  You should have received a copy of the /GNU General Public License/
+  along with this software; see the file <"`COPYING'" --
+  $/COPYING.html>.  If not, write to the Free Software Foundation, 675
+  Mass Ave, Cambridge, MA 02139, USA.
+
+  [[null
+   ; arch-tag: Tom Lord Fri Jul 15 11:08:46 2005 (index.txt)
+  ]]

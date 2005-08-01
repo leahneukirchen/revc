@@ -1,0 +1,268 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+  <head>
+    <title>Seyza</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link href="../gnuarch.css" rel="stylesheet" type="text/css">
+  </head>
+
+  <body>
+
+    <h1 class="page-title"><u>Seyza</u></h1>
+
+    <div class="mainContent">
+
+<h1 class=essay-title>
+  GNU Arch 2.0: <code>revc</code><br>
+  
+</h1>
+
+<div class="abstract-body">
+
+  <p>
+    <a href="../arch/index.html"><b>GNU Arch</b></a> is a distributed, democratic,
+     changeset-oriented, peer-to-peer revision control system.
+
+
+
+
+  <p>
+    This page is about version 2.0: a new, major update to <b>Arch</b>,
+     currently in progress.
+
+
+
+</div>
+
+<blockquote>
+  
+  <p>
+    <i><b>contents</b></i>
+
+
+
+
+  <p>
+    <a href="#release information">release information</a> -- obtaining code
+
+
+
+
+  <p>
+    <a href="#todo items">todo items</a> -- todo items and bite-sized tasks
+
+
+
+
+  <p>
+    <a href="#documentation">documentation</a> -- doc links
+
+
+
+</blockquote>
+
+
+  <h2><a name="release information"><b><code>{release information}</code></b></a>
+</h2>
+  <blockquote>
+    
+    <p>
+      The third development release of Arch 2.0 is ready
+
+
+
+
+    <blockquote>
+      
+      <p>
+        <a href="http://www.seyza.com/releases/revc-0.0x2.tar.gz">http://www.seyza.com/releases/revc-0.0x2.tar.gz</a>
+
+
+
+
+      <p>
+        <b>SHA1:</b> <code></code>
+
+
+
+
+      <p>
+        <b>Size:</b> <code></code>
+
+
+
+    </blockquote>
+
+    <p>
+      This release implements a more scalable, cleaner archive format.
+
+
+
+
+    <p>
+      This release also fixes bugs that have caused people annoyances
+    building on Cygwin.
+
+
+
+
+  </blockquote>
+
+
+
+
+  <h2><a name="documentation"><b><code>{documentation}</code></b></a>
+</h2>
+  <p>
+    <a href="./hackers-guide.html"><b>A Hacker's Guide to Arch 2.0</b></a> -- some
+  hints about how hit works.
+
+
+
+
+  <p>
+    <a href="./quick-intro.html"><b>A Quick Intro to Core Arch 2.0 Commands</b></a>
+  -- a brief description of the core commands.
+
+
+
+
+
+
+
+
+  <h2><a name="todo items"><b><code>{todo items}</code></b></a>
+</h2>
+  
+    <h3><code>revc</code> Highest Priority TODO Items
+</h3>
+    <p>
+      The code is very clean but could use a light reorg, a careful
+  review, dealing with all parts marked <code>dangle</code> or <code>debug</code>.
+
+
+
+
+    <p>
+      The commands need to be implemented: <code>ancestor</code>, <code>merged</code>, 
+  <code>get-merge-trees</code>, <code>prereqs</code>, <code>init name</code>, <code>name</code>.
+
+
+
+
+    <p>
+      Some convenience commands are needed that capture the ideas of
+  &quot;branching&quot;, &quot;tagging&quot;, &quot;merge&quot;, and &quot;update&quot;.
+
+
+
+
+    <p>
+      Better documentation.
+ 
+
+
+
+
+  
+  
+  
+    <h3><code>revc</code> &quot;Bite-sized tasks&quot;
+</h3>
+    <p>
+      Commands such as <code>revc-add</code> do no canonicalize their filename
+  arguments.  Extra slashes, <code>/.</code> components and the like can lead to
+  a bogus manifest (fixable by passing the same non-canonical path to
+  <code>revc-del</code>, btw).  A good canonicalizer is desirable and it should
+  be sprinkled liberally throughout the code.
+
+  
+
+
+
+  
+  
+  
+    <h3><code>revc</code> Next Priority TODO Items
+</h3>
+    <p>
+      Activate the &quot;blob hint&quot; optimization.
+
+
+
+
+    <p>
+      Implement an inode-based file signature cache.
+
+
+
+
+    <p>
+      Debug the support for partial commits.
+
+
+
+
+    <p>
+      Improve the transactionality of working dirs.
+
+
+
+
+
+
+
+  
+  
+
+
+
+  <h2>Copyright
+</h2>
+  <p>
+    Copyright <b>(C)</b> 2005 Tom Lord (<code>lord@emf.net</code>)
+
+
+
+
+  <p>
+    This program is free software; you can redistribute it and/or modify
+  it under the terms of the <b>GNU General Public License</b> as published by
+  the Free Software Foundation; either version 2, or (at your option)
+  any later version.
+
+
+
+
+  <p>
+    This program is distributed in the hope that it will be useful,
+  but <b><big>WITHOUT ANY WARRANTY</big></b>; without even the implied warranty of
+  <b><big>MERCHANTABILITY</big></b> or <b><big>FITNESS FOR A PARTICULAR PURPOSE</big></b>.  See the
+  <b>GNU General Public License</b> for more details.
+
+
+
+
+  <p>
+    You should have received a copy of the <b>GNU General Public License</b>
+  along with this software; see the file <a href="../COPYING.html"><code>COPYING</code></a>.  If not, write to the Free Software Foundation, 675
+  Mass Ave, Cambridge, MA 02139, USA.
+
+
+
+
+
+    </div>
+
+    <div class="navLeft">
+
+<p>
+  <a href="../index.html">home</a>
+
+
+
+
+    </div>
+
+  </body>
+</html>

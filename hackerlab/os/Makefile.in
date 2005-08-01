@@ -1,0 +1,34 @@
+
+include-subdirs		:=	sys netinet arpa
+generated-includes	:=	exit-status.h alloca.h
+
+include $(makefiles)/library-objects.mk
+
+ifeq ($(cgs__install_hackerlab),1)
+include $(makefiles)/install-includes.mk
+endif
+
+exit-status.h: exit-status.gen
+	cp $(srcdir)/exit-status.gen  ,es.c
+	$(CC) -o ,es -g ,es.c
+	./,es > exit-status.h
+	rm -f ,es ,es.exe ,es.c
+
+ifeq ($(cfg__have_alloca_h_header),1)
+alloca.h: alloca.h.in
+	sed -e 's/@@@/#include <alloca.h>/' $(srcdir)/alloca.h.in > $@
+else
+alloca.h: alloca.h.in
+	sed -e 's,@@@,/* <alloca.h> not needed on this system */,' $(srcdir)/alloca.h.in > $@
+endif
+
+
+exit.o: exit-status.h
+
+clean: clean-os
+
+clean-os:
+	test ! -e exit-status.h || rm exit-status.h
+
+# tag: Tom Lord Tue Dec  4 14:52:05 2001 (os/Makefile.in)
+#

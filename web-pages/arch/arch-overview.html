@@ -1,0 +1,255 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+  <head>
+    <title>Seyza</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link href="../gnuarch.css" rel="stylesheet" type="text/css">
+  </head>
+
+  <body>
+
+    <h1 class="page-title"><u>Seyza</u></h1>
+
+    <div class="mainContent">
+
+<h1 class=essay-title>
+  An Overview of GNU Arch<br>
+  <hr align="left" width="14%">
+  <small>A Brief Description of the <code>GNU Arch</code><br>
+  Revision Control System<br>
+  </small>
+</h1>
+
+<p>
+  Below is a brief list of the features that most distinguish Gnu Arch
+  from competing systems. This list presumes that you are somewhat
+  familiar with revision control systems in general. (See also, 
+  <a href="./what-is-revctl.html">What is Revision Control?</a>)  
+
+
+
+
+
+
+  <h2>Whole Tree Changesets: Atomic Commits and Add/Delete/Rename Handling
+</h2>
+  <p>
+    Transactions in Gnu Arch are on <i>whole source trees</i>. For example,
+  let's suppose that you modify three files in order to fix a
+  bug. When you commit this change, you commit all three files at
+  once. Arch records a new revision that contains exactly the
+  modifications to those three files (relative to some earlier
+  revision).
+
+
+
+
+  <p>
+    Atomic, whole-tree commits are very convenient. To continue the
+  example: you could record the name of the new revision in your bug
+  database as the revision that contains the bug-fix. Or you could
+  send the name of the new revision to a fellow-programmer, who can
+  then merge exactly those changes and no others into his own
+  branch. A project maintainer can ask arch to display exactly those
+  changes in order to review your work.
+
+
+
+
+  <p>
+    Whole tree changesets in Arch correctly handle file, directory, and
+  symbolic link additions, removals, and renames. &quot;Correctly handle&quot;
+  means not only that such changes are recorded as part of the
+  changeset, but also that you can merge changes back and forth
+  between versions that do and do not have those tree-structure
+  changes, and the merging process will take that into account.
+
+
+
+
+
+
+
+  <h2>Symbolic Revision Names
+</h2>
+  <p>
+    Arch assigns revisions meaningful, symbolic names that are globally
+  unique among a community of arch users. Thus, it is always possible
+  to refer unambiguously to any given revision, in any Arch
+  archive. Strange annoyances such as CVS's &quot;even/odd length&quot; branch
+  and revision numbering scheme or Subversions global repository
+  revision number are avoided in Arch.
+
+
+
+
+
+
+
+  <h2>Easy Branching and Smart Merging
+</h2>
+  <p>
+    Creating a branch in Arch can be accomplished with a single, fast command.
+
+
+
+
+  <p>
+    Merging between branches in Arch is <i>history sensitive</i> which means
+  that Arch helps to avoid spurious merge conflicts by avoiding
+  redundent merges whenever it can.
+
+
+
+
+  <p>
+    In fact, there are <i>many</i> different kinds of merging that are useful
+  in the world (e.g., CVS-like updates, cherry-picking,
+  vendor-branch-style tracking, mutual 3-way merges between
+  branches...). Rather than provide just one merge command, Arch
+  provides a <i>toolbox</i> of several merge commands, allowing you to pick
+  the right tool for each job.
+
+
+
+
+
+
+
+  <h2>Versioned Tagging
+</h2>
+  <p>
+    Tags in Arch are as easy to create as branches (in fact, the same
+  mechanism is used).
+
+
+
+
+  <p>
+    Tags can be &quot;moved&quot; in Arch and, when the are, data about their old
+  location is preserved. In other words, tags are revision controlled
+  just like source.
+
+
+
+
+
+
+
+  <h2>Lightweight, Standard Servers; Simple On-disk Formats
+</h2>
+  <p>
+    Arch uses a collection of stone-simple on-disk formats for archives
+  and ancillary databases. It does not require or use a relational
+  database, hash-table database, object database, or CVS-like &quot;,v&quot;
+  files.
+
+
+
+
+  <p>
+    Consequently, creating a new local archive is utterly trivial: a
+  single arch command does it, basically by creating some new
+  directories.
+
+
+
+
+  <p>
+    And, consequently, remote archives <i>do not require an Arch specific
+  server!</i> Your existing <b><code>SFTP</code></b>, <b><code>FTP</code></b>, or <b><code>WebDav</code></b> server can
+  be used as an Arch server. Your existing <b><code>HTTP</code></b> server can be used
+  as a read-only Arch server.
+
+
+
+
+
+
+
+  <h2>Distributed Operation
+</h2>
+  <p>
+    Branches, in Arch, are not required to be in the same archive as the
+  branched-from version. In fact, creating a branch requires nothing
+  more than read-only access to the branched-from version.
+
+
+
+
+  <p>
+    Operation across archive boundaries in Arch is essentially seemless:
+  commands operate equally well on local and remote archives and on
+  versions scattered across multiple archives.
+
+
+
+
+  <p>
+    For public and inter-organizational development projects distributed
+  operation is an especially valuable feature: contributors can form
+  and publish their work on their own branches of your mainline
+  sources -- without requiring that they have write access to your
+  archive. You can merge in their changes as easily as if they had
+  been committed to your own archives.
+
+
+
+
+
+
+
+  <h2>Integrity Checking and Signed Revisions
+</h2>
+  <p>
+    Archive revisions are protected against storage-media corruption by
+  checksum files which are verified during ever
+  retrieval. Additionally, committed revisions can be
+  cryptographically signed by their creators, and those signatures
+  verified on retrieval.
+
+
+
+
+
+
+
+  <h2>Easy Mirroring
+</h2>
+  <p>
+    It is trivial to set-up and incrementally update read-only mirrors
+  of any arch archive. A common pattern of use in public projects is
+  to improve performance by creating private local copies of remote
+  archives.
+
+
+
+
+
+
+    </div>
+
+    <div class="navLeft">
+
+<p>
+  <a href="../index.html">home</a>
+
+
+
+
+<p>
+  <a href="./index.html">Arch in general</a>
+
+
+
+
+<p>
+  <a href="../revc/index.html">GNU Arch 2.0</a>
+
+
+
+
+    </div>
+
+  </body>
+</html>

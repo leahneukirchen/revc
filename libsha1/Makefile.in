@@ -1,0 +1,8 @@
+include $(makefiles)/library.mk
+
+ifeq ($(cgs__install_libsha1),1)
+include $(makefiles)/install-library.mk
+endif
+
+# arch-tag: Tom Lord Fri Apr 15 22:58:20 2005 (libsha1/Makefile.in)
+#

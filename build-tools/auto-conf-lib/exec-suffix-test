@@ -1,0 +1,37 @@
+# exec-suffix-test - check for suffix added by C compiler
+#
+################################################################
+# Copyright (C) 2002 Tom Lord
+# Copyright (C) 2003 Stig Brautaset
+# 
+# See the file "COPYING" for further information about
+# the copyright and warranty status of this work.
+# 
+
+
+# exec-suffix-test 
+# 
+# Check if the compiler adds a suffix to binaries. 
+#
+
+if test $# -ne 0 ; then
+  printf "usage: exec-suffix-test\n" 1>&2
+  exit 1
+fi
+
+rm -rf ,auto-conf-tmpdir
+rm -f ,test-prog.c
+
+printf "int main (int argc, char * argv[]) { return 0; }" > ,test-prog.c
+
+mkdir ,auto-conf-tmpdir 
+cd ,auto-conf-tmpdir
+
+${CC} -o ,test-prog ../,test-prog.c 2> /dev/null > /dev/null 
+
+suffix="`ls | sed s/^,test-prog//`"
+
+printf "string %s=%s\n" "exec-suffix" "$suffix"
+
+# arch-tag: Stig Brautaset Tue Jul  1 22:11:10 BST 2003
+#

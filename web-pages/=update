@@ -1,0 +1,17 @@
+
+set -e 
+
+if test $# -eq 0 ; then
+  for f in [a-z]*.txt ; do
+    rm -f ${f%.txt}.html
+    awiki -t "Seyza" -N ./gnuarch.css -n ./top-nav.txt -r . $f > ${f%.txt}.html
+  done
+else
+  for f in "$@" ; do
+    rm -f ${f%.txt}.html
+    awiki -t "Seyza" -N ./gnuarch.css -n ./top-nav.txt -r . $f > ${f%.txt}.html
+  done
+fi
+
+
+# arch-tag: Tom Lord Mon Dec 13 08:57:50 2004 (tla-ws/=update)
